@@ -1,0 +1,45 @@
+### Commands ###
+Make sure you are in 14_git_tutorial directory
+
+# make a directory
+mkdir my_first_repo
+
+# We have the hello.sh file in the folder. Lets deploy it in git hub
+
+#  README is needed to explain the contents
+echo "# myfirstrepo" >> README.md
+
+#Version check
+git version
+
+# Iniate GIT
+git init
+
+# Add the file that you want to move to repo
+git add README.md
+
+# commit to changes with message
+git commit -m "first commit"
+
+# specifiy which is your origin
+git remote add origin https://github.com/itzmekasthuri/myfirstrepo.git
+
+# Push the changes
+git push -u origin master
+
+# git status check
+git status
+
+# if you want add all commands
+git add .
+
+#Commit changes
+git commit -m "adding the program"
+
+#Push Changes
+git push -u origin master
+
+# Git status
+git status
+
+
