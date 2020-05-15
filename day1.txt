@@ -1,0 +1,342 @@
+    1  docker --version
+    2  docker ps
+    3  docke pull ubuntu
+    4  docker pull ubuntu
+    5  cat /etc/group
+    6  cat /etc/group | grep 'docker'
+    7  docker ps
+    8  exit
+    9  docker ps
+   10  docker pull ubuntu
+   11  docker ps
+   12  docker images
+   13  docker ps -a
+   14  docker pull ubuntu
+   15  docker images
+   16  docker run -it -d ubuntu
+   17  docker ps -a
+   18  docker run -it -d --name $USER ubuntu
+   19  docker ps -a
+   20  docker exec -it $USER bash
+   21  docker stop $USER
+   22  docker ps -a
+   23  docker run -v ~/Desktop:/testmydata -it $USER
+   24  docker start $USER
+   25  docker run -v ~/Desktop:/testmydata -it $USER
+   26  docker ps -a
+   27  docker run -it $USER
+   28  docker exec -it $USER bash
+   29  docker ps -a
+   30  docker run -it $USER
+   31  docker run -v -it $USER
+   32  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   33  docker stop $USER
+   34  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   35  docker ps -a
+   36  docker rm container $USER
+   37  docker rm $USER
+   38  docker ps -a
+   39  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   40  docker run -d --name $USER -v ~/Desktop:/mnt -t ubuntu
+   41  docker exec -it $USER bash
+   42  ls Desktop/
+   43  docker exec -it $USER bash
+   44  mkdir Desktop/test
+   45  touch Desktop/test/hi.txt
+   46  docker exec -it $USER bash
+   47  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   48  docker ps -a
+   49  docker rm $USER
+   50  docker stop $USER
+   51  docker rm $USER
+   52  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   53  docker run -d --name $USER -v ~/Desktop:/mnt -t ubuntu
+   54  docker exec -it $USER bash
+   55  ls Desktop/test/
+   56  nano Desktop/test/hi.txt 
+   57  rm -rf Desktop/test
+   58  ls -lh Desktop/
+   59  docker exec -it $USER bash
+   60  ls -lh Desktop/
+   61  rm -rf Desktop/test/
+   62  docker exec -it $USER bash
+   63  mkdir Desktop/test
+   64  touch Desktop/test/hi.txt
+   65  nano Desktop/test/hi.txt 
+   66  docker exec -it $USER bash
+   67  ls Desktop/test/
+   68  ls -lh Desktop/test/
+   69  docker pull broadinstitute/gatk:4.1.3.0
+   70  docker ps -a
+   71  docker pull broadinstitute/gatk:4.1.3.0
+   72  docker images
+   73  docker rmi bash
+   74  docker images
+   75  docker run -it broadinstitute/gatk
+   76  docker images
+   77  docker rmi broadinstitute/gatk
+   78  docker images
+   79  docker rmi broadinstitute/gatk
+   80  docker images
+   81  docker rmi broadinstitute/gatk:4.1.3.0 
+   82  docker images
+   83  docker rmi broadinstitute/gatk:4.1.3.0 
+   84  docker pull broadinstitute/gatk:4.1.3.0
+   85  docker run -it broadinstitute/gatk:4.1.3.0
+   86  docker ps -a
+   87  docker stop 5afde4591244
+   88  docker rm 5afde4591244
+   89  docker ps -a
+   90  docker run -it broadinstitute/gatk:4.1.3.0 --name $USER
+   91  docker run --name $USER -it broadinstitute/gatk:4.1.3.0
+   92  docker ps -a
+   93  docker stop 17614c5fbb8e
+   94  docker rm 17614c5fbb8e
+   95  docker run --name $USER.gatk -it broadinstitute/gatk:4.1.3.0
+   96  docker 
+   97  docker run --name $USER.gatk -it broadinstitute/gatk:4.1.3.0
+   98  docker exec -it $USER.gatk
+   99  docker exec -it $USER.gatk bash
+  100  docker ps -a
+  101  docker start $USER.gatk
+  102  docker exec -it $USER.gatk bash
+  103  docker ps -a
+  104  docker stop $USER.gatk
+  105  docker rm container $USER.gatk
+  106  docker stop $USER.gatk
+  107  docker ps -a
+  108  docker run --name $USER.gatk -it broadinstitute/gatk:4.1.3.0
+  109  docker ps -a
+  110  docker stop $USER.gatk
+  111  docker ps -a
+  112  docker stop $USER.gatk
+  113  docker tm $USER.gatk
+  114  docker rm $USER.gatk
+  115  docker ps -a
+  116  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu
+  117  docker stop $USER
+  118  docker rm $USER
+  119  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu
+  120  docker exec -it $USER bash
+  121  docker ps -a
+  122  docker rm 88ad1b810b16
+  123  docker stop 88ad1b810b16
+  124  docker rm 88ad1b810b16
+  125  docker ps -a
+  126  docker stop 91c928875258
+  127  docker rm 91c928875258
+  128  docker ps -a
+  129  docker stop eea154a19fe0
+  130  docker rm eea154a19fe0
+  131  docker ps -a
+  132  docker exec -it $USER bash
+  133  docker ps -a
+  134  ls
+  135  ls Desktop/
+  136  ls Desktop/chipseq
+  137  ls -lh Desktop/chipseq
+  138  ls -lh Desktop/chipseq/
+  139  ls /home/visk/
+  140  ls /home/visk/Desktop/
+  141  ls /home/visk/linux_training/
+  142  ls /home/visk/linux_training/1_basic_linux/
+  143  ls /home/visk/linux_training/2_data_wrangle/
+  144  ls /home/visk/linux_training/3_file_manipulate/
+  145  ls /home/visk/linux_training/3_file_manipulate/files/
+  146  df -sh /home/visk/linux_training/
+  147  du -sh /home/visk/linux_training/
+  148  ln -s /home/manager/linux_training .
+  149  ls
+  150  ls linux_training
+  151  docker ps -a
+  152  docker stop $USER
+  153  docker rm $USER
+  154  docker run -d --name $USER -v ~/:/mnt -it ubuntu
+  155  docker exec -it $USER bash
+  156  docker stop $USER
+  157  docker rm $USER
+  158  docker run -d --name $USER -v /home/manager/linux_training:/mnt -it ubuntu
+  159  docker exec -it $USER bash
+  160  ls
+  161  docker stop $USER
+  162  docker rm $USER
+  163  ls
+  164  cp -R /home/manager/linux_training
+  165  cp -R /home/manager/linux_training .
+  166  ls
+  167  ls linux_training/1_basic_linux/
+  168  ls
+  169  mv linux_training linux
+  170  ls
+  171  rm -rf linux/
+  172  cp -R /home/manager/linux .
+  173  mkdir mydemo
+  174  cp /home/manager/Desktop/unix/human.vcf mydemo
+  175  cp /home/manager/unix/human.vcf mydemo
+  176  cp /home/manager/Desktop/unix/human.vcf mydemo
+  177  cp /home/manager/unix/human.vcf mydemo
+  178  ls mydemo/
+  179  cd mydemo/
+  180  cp /home/manager/unix/FoxA1_peaks.narrowPeak peaks.txt
+  181  cp /home/manager/unix/knownToRefSeq.txt .
+  182  head knownToRefSeq.txt 
+  183  ls
+  184  ls ~
+  185  ls ~/linux/
+  186  ls ~/linux/2_data_wrangle/
+  187  cd ..
+  188  ls
+  189  rm -rf mydemo/
+  190  rm -rf linux
+  191  ls
+  192  mkdir mydemo
+  193  ls
+  194  cp /home/manager/linux/basic/* mydemo
+  195  ls
+  196  ls mydemo/
+  197  cd mydemo/
+  198  ls
+  199  rm ncbiRefSeq.txt 
+  200  head knownToRefSeq.txt 
+  201  cd .
+  202  cd ..
+  203  rm -rf mydemo/
+  204  mkdir mydemo
+  205  cp /home/manager/linux/basic/* mydemo
+  206  cd mydemo/
+  207  ls
+  208  awk '//' transcriptome.gtf
+  209  awk '// {print $2,$3,$4}' transcriptome.gtf
+  210  awk 'NR==1 {print; exit}' ex.txt
+  211  awk '/NOVEL/ {print}' transcriptome.gtf
+  212  awk '$0 !~ /^X/ {print $0 } ' ex.txt
+  213  awk '{if ($4 >= 129299628 && $5 <=143038471) print}' transcriptome.gtf
+  214  awk 'BEGIN { print " File starts here" }  { print } END { print "==ends here==" }' ex.txt  
+  215  awk '{ print "Total Columns:", NF}' transcriptome.gtf
+  216  cd
+  217  ls
+  218  cp -R /home/manager/linux .
+  219  ls
+  220  cp -R /home/manager/linux Desktop/.
+  221  rm -rf linux/
+  222  ls Desktop/
+  223  ls
+  224  docker ps -a
+  225  cp -R /home/manager/linux Desktop/.
+  226  ls
+  227  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu
+  228  ls Desktop/
+  229  docker exec -it $USER bash
+  230  ls Desktop/
+  231  ls Desktop/linux/advanced/
+  232  docker exec -it $USER bash
+  233  ps -aux
+  234  ps -x
+  235  ps -ax
+  236  ps -ux
+  237  ps -raux
+  238  ps -r
+  239  ps -raux
+  240  ps -aux
+  241  ps -C mate
+  242  ps -C ssh
+  243  ps -G root
+  244  ps -G manager
+  245  ps -u manager
+  246  ps -u johnp
+  247  ps -u root
+  248  ps -aux
+  249  ps -au
+  250  manps
+  251  man ps
+  252  ps -au
+  253  ps -aux
+  254  ps -au
+  255  ps ix
+  256  ps ux
+  257  ps 10155
+  258  nice -n 19 wc -l file.txt
+  259  nice -n 19
+  260  nice --help
+  261  man nice
+  262  docker exec -it $USER bash
+  263  ls
+  264  ls mydemo/
+  265  ls
+  266  ls Desktop/
+  267  docker images
+  268  docker ps -a
+  269  docker exec -it $USER bash
+  270  docker start $USER
+  271  docker exec -it $USER bash
+  272  crontab -l
+  273  crontab -e
+  274  crontab -l
+  275  crontab -e
+  276  crontab -l
+  277  ls
+  278  cd Desktop/
+  279  ls
+  280  ls linux/
+  281  ls linux/advanced/
+  282  ls linux/advanced/emboss/
+  283  ls linux/advanced/emboss/sample_sequences
+  284  cd ~/Desktop/linux/advanced/emboss/sample_sequences
+  285  ls
+  286  tar cf archive.tar *fasta
+  287  ls
+  288  tar cf archive2.tar *fasta
+  289  ls
+  290  ls -lh
+  291  tar xf archive2.tar
+  292  ls
+  293  rm bos.archive.tar.gz 
+  294  tar czf bos.archive.tar.gz bos
+  295  ls 
+  296  tar xzvf bos.archive.tar.gz
+  297  ssh host
+  298  ssh localhost
+  299  cd
+  300  cd Desktop/linux/
+  301  ls
+  302  cd advanced/
+  303  ls
+  304  ls my_first_repo/
+  305  cd ~/Desktop/linux/advanced
+  306  ls
+  307  cd
+  308  mkdir my_first_repo
+  309  cd ~/Desktop/linux/advanced/my_first_repo
+  310  ls
+  311  cat README.md 
+  312  echo "# myfirstrepo" >> README.md
+  313  ls
+  314  git version
+  315  git init
+  316  git add README.md 
+  317  git commit -m "first commit"
+  318  git status
+  319  git log --stat
+  320  git log --topo-order --all --graph --date=local --pretty=format:'%C(green)%h%C(reset) %><(55,trunc)%s%C(red)%d%C(reset) %C(blue)[%an]%C(reset) %C(yellow)%ad%C(reset)%n'
+  321  cd
+  322  ls
+  323  rm -rf mydemo/
+  324  ls
+  325  cd Desktop/
+  326  ls
+  327  rm -rf linux/
+  328  ls
+  329  ls -lh
+  330  rm -rf linux/
+  331  lsls
+  332  ls
+  333  rm -rf test/
+  334  ls
+  335  cd
+  336  ls
+  337  exit
+  338  ls -lh
+  339  vwd
+  340  pwd
+  341  history > day1
+  342  history > day1.txt
