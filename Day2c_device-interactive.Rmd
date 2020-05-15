@@ -1,0 +1,171 @@
+---
+title: "Graphics device"
+runtime: html
+output:
+  word_document: default
+  html_document:
+    keep_md: yes
+---
+
+```{r setup, cache=FALSE, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width=4, fig.height=4, dpi=300, warning=FALSE, message=FALSE)
+```
+``` {r include = FALSE }
+oldPar = par()
+```
+
+## I. Interactive Displays
+
+##### --------------------------------------------------------------------------------------------------------
+
+### 1. Set Environment  
+
+``` {r  warning = FALSE}
+setwd("/Users/balaji/Downloads/plots")
+
+# load data
+load('/Users/balaji/Downloads/plots/NeveG.RData')
+load('/Users/balaji/Downloads/plots/NeveG200.RData')
+
+library(ggvis); library(DiagrammeR); library(dygraphs); library(leaflet); library(reshape2);
+library(graph); library(Rgraphviz); library(ggplot2); library(datasets); library(forecast); library(ggfortify); library(grid); library(gridExtra); library(OpenStreetMap); library(rgdal)
+library(RColorBrewer); library(colorspace); library(colorRamps); library(dendextend)
+library(gplots); library(hexbin); library(plotly); library(heatmaply)
+```
+
+### 2. Set data  
+``` {r  warning = FALSE}
+Data <- NeveG_data
+mData <- melt(Data, measure.vars = 5:13, variable.name = 'Gene', value.name = 'GEX')
+
+```
+
+### 3. [{ggvis}](http://ggvis.rstudio.com/)  
+
+#### An implementation of an interactive grammar of graphics similar to ggplot2. 
+
+- the "%>%"" operator layers up graphics elements; ("+" in ggplot2)  
+- initial object is created with ggvis(); (ggplot in ggplot2)    
+- actual plots are made with layers; (geoms in ggplot2)    
+- "~" is always placed before variable name in a plotting formula    
+- "=" maps a variable to a property, e.g fill = ~Var would set the color based on the levels of Var  
+- ":=" sets a property based on a value, e.g. fill := 'blue' would set the color to blue  
+- interactive inputs are introduced with properties or input_* functions   
+
+#### 3.1 Histogram
+```{r fig.width = 3.5, fig.height = 1.5}
+
+Data %>%
+  ggvis(~MEGF9) %>%
+  
+  # change color on hover
+  layer_histograms(fill.hover := 'white', 
+        
+        # change bin width
+        width = input_slider(0.1, 2, step = 0.1, label = "Bin Width"),
+        
+        # choose bar color
+        fill := input_select(choices = c('aliceblue', 'lightyellow', 'lavender','lightgrey'),                             selected = "aliceblue", label = "Fill Color")) %>%
+  add_axis("x", title = "MEGF9 log2 Expression") %>%
+  add_axis("y", title = "Bin Count")
+```
+
+#### 3.2 Scatter plot
+```{r fig.width = 3.5, fig.height = 1.5}
+
+Data %>%
+  ggvis(~LARGE, ~ESR1,
+        
+        # change point size
+        size := input_numeric(50, label = "Point size"),
+        
+        fill = ~ER,
+        
+        # change opacity
+        opacity := input_slider(0, 1, value = 1, label = "Opacity")) %>% 
+  
+  layer_points() %>%
+  
+  # show y-value, rounded
+  add_tooltip(function(data) round(data$ESR1,1))
+  
+```
+
+### 4. [{dygraphs}](https://rstudio.github.io/dygraphs/index.html)  
+
+#### Interactive plots for time series data. It is an R interface to the 'dygraphs' JavaScript charting library.  
+
+#### 4.1 Time series plot  
+```{r }
+# prepare data
+data(AirPassengers)
+d <- AirPassengers
+
+# make plot
+dygraph(d, main = "Airline Passenger Numbers 1949-1960", ylab = "Passengers (Thousands)",
+        width = 700, height = 500) %>%
+  
+  dyOptions(colors = rainbow_hcl(5)[3]) %>%
+  
+  dySeries(drawPoints = TRUE, pointSize = 1.5) %>%
+  
+  dyOptions(fillGraph = TRUE, fillAlpha = 0.2, drawGrid = FALSE) %>%
+  
+  dyRangeSelector()
+  
+```
+
+### 5. [{plotly}](https://images.plot.ly/plotly-documentation/images/r_cheat_sheet.pdf)   
+
+#### Interactive web graphics from R via plotly's JavaScript graphing library https://plot.ly/r/. 
+
+
+#### 5.1 Boxplot    
+
+``` {r fig.width = 2, fig.height = 1}
+plot_ly(mData, y = ~GEX, color = ~geneCluster, type = 'box' )
+```
+
+#### 5.2 Correlation heatmap  
+
+``` {r fig.width = 2, fig.height = 1.7}
+d = NeveG200_data[1:10, 1:10]
+cormat = cor(d)
+heatmaply(cormat)
+```
+
+#### 5.3 Transform ggplot2 figure to plotly 
+
+``` {r fig.width = 2, fig.height = 1.7}
+fig <- qplot(data = Data, ageY, MEGF9, geom=c('point','smooth')) 
+ggplotly(fig)
+```
+
+
+#### 5.4 Plot and annotate map (R ?plot_ly example) 
+
+world{maps}, canadian.cities{maps) datasets
+
+``` {r fig.width = 3, fig.height = 2}
+ggplot2::map_data("world", "canada") %>%
+  group_by(group) %>%
+  plot_ly(x = ~long, y = ~lat) %>%
+  add_polygons(hoverinfo = "none") %>%
+  add_markers(text = ~paste(name, "<br />", pop), hoverinfo = "text",
+              data = maps::canada.cities) %>%
+  layout(showlegend = FALSE)
+```
+
+
+#### 5.5 Surface plot (R ?plot_ly example)  
+
+volcano{datasets}: Topographic Information on Auckland's Maunga Whau Volcano
+
+```{r fig.width = 3, fig.height = 2}
+x <- seq_len(nrow(volcano)) + 100
+y <- seq_len(ncol(volcano)) + 500
+plot_ly() %>% add_surface(x = ~x, y = ~y, z = ~volcano)
+```
+

@@ -1,0 +1,412 @@
+---
+title: "Graphics systems in R"
+output: word_document
+---
+
+```{r setup, cache=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width=4, fig.height=4, out.height = '30%', out.width = '30%', dpi=100)
+```
+``` {r include = FALSE}
+oldPar = par()
+```
+
+## I. Standard graphics
+
+Base package {graphics} is the graphics system that was originally developed for S language at Bell Labs in the 1970s.  It is loaded by default when R starts.
+
+- plot() is the main, high-level function for creating graphics
+- par() sets-up parameters which control the layout and look of the graphics  
+
+##### --------------------------------------------------------------------------------------------------------
+
+### 1. Set Environment
+```{r }
+setwd("/Users/balaji/Downloads/plots")
+load('helperFunctions.RData')
+```
+
+### 2. Set Plotting data
+
+Generate random data points ("Variable" - R vector) from standard normal distribution (N=50) 
+
+```{r }
+set.seed(100); Variable <- rnorm(50)
+set.seed(100); names(Variable) <- randomNames(n=50, length=3)
+```
+
+### 3. Generic X-Y Plot
+```{r }
+plot(Variable) ## type = 'p'; points
+```
+
+- Add figure regions in the background
+```{r }
+plotRegions() 
+```
+
+### 4. Customize Plot  
+
+Graphical options can be customized through:
+
+- an argument in par() function; par( parameter.name = value ); the option will be in effect until the end of the R session or until updated
+- an argument in a plot() function; plot(..., parameter.name = value); the option will be in effect for the current plot
+- current values of the parameters can be viewed with par() and par()$parameter.name or par("parameter.name")
+
+Examples:  
+
+``` {r results = 'hide'}
+# list values for all parameters 
+# par()
+# ?par
+length(par())
+
+# figure/plot dimensions in inches
+par()$fin; par()$pin
+
+# inner/outer figure margins in inches and the number of text lines
+par()$mai; par()$mar
+par()$omi; par()$oma
+
+# size of plotting text and symbols (default = 1; 1.5 is 50% larger, 0.5 is 50% smaller, etc.
+par()$cex;par()$cex.axis; par()$cex.label; par()$cex.main
+
+# shape of plotting symbol
+par()$pch
+
+# line width and type
+par()$lwd; par()$lty
+```
+
+
+- 4.1 Modify margins and add annotation in the outer margin area; add figure and outer boxes
+``` {r }
+par( oma = c(0,0,2,0), mar = c(6,4,2,1) )
+plot(Variable)
+
+mtext( 'Page 1', side = 3, out = TRUE, cex = 0.5 )
+box(which = 'outer')
+box(which = 'figure')
+```
+
+- 4.2 Add/modify titles
+``` {r }
+par( oma = c(0,0,2,0), mar = c(6,4,2,1) )
+plot(Variable,
+     
+     main = 'Figure 1', cex.main = 2, 
+     sub = 'sample size = 50', cex.sub = 0.8,
+     xlab = 'Subject', ylab = 'Z-score')
+
+mtext( 'Page 1', side = 3, out = TRUE, cex = 0.5 )
+box(which = 'outer')
+box(which = 'figure')
+```
+
+- 4.3 Plot standard point shapes
+``` {r fig.width = 3, fig.height = 3, out.width = '50%', out.height = '50%' }
+plotPoints() 
+```
+
+- Change point shape, color, and size
+``` {r }
+par( oma = c(0,0,2,0), mar = c(6,4,2,1) )
+plot(Variable,
+     main = 'Figure 1', cex.main = 2, 
+     sub = 'sample size = 50', cex.sub = 0.8,
+     xlab = 'Subject', ylab = 'Z-score',
+     
+     type = 'p', pch = 16, col = 'orange', cex = 1.5)
+
+mtext( 'Page 1', side = 3, out = TRUE, cex = 0.5 )
+box(which = 'outer')
+box(which = 'figure')
+```
+
+- 4.4 Draw customized axes
+``` {r }
+par( oma = c(0,0,2,0), mar = c(6,4,2,1) )
+
+# suppress drawing of both axes, modify limits for y-axis
+
+plot(Variable,
+     main = 'Figure 1', cex.main = 2, 
+     sub = 'sample size = 50', cex.sub = 0.8,
+     xlab = 'Subject', ylab = 'Z-score',
+     pch = 16, col = 'orange', cex = 1.5,
+     
+     axes = FALSE,
+     ylim = c(-3,3))
+
+# add axes
+
+axis(1, at = seq(0, 50, 5))
+axis(2, at = seq(-3, 3, by=0.5), labels=FALSE, tck=-0.01)
+axis(2, at = seq(-3, 3, by=1), las=2)
+box(which = 'plot', bty= 'o')
+
+mtext( 'Page 1', side = 3, out = TRUE, cex = 0.5 )
+box(which = 'outer')
+box(which = 'figure')
+```
+  
+- 4.5 Plot line types
+``` {r fig.width = 3, fig.height = 2, out.width = '50%', out.height = '30%'}
+plotLines()
+```
+
+- 4.6 Add horizontal line and label maximal point
+``` {r }
+par( oma = c(0,0,2,0), mar = c(6,4,2,1) )
+
+# suppress drawing of both axes, modify limits for y-axis
+
+plot(Variable,
+     main = 'Figure 1', cex.main = 2, 
+     sub = 'sample size = 50', cex.sub = 0.8,
+     xlab = 'Subject', ylab = 'Z-score',
+     type = 'p', pch = 16, col = 'orange', cex = 1.5,
+     axes = FALSE,
+     ylim = c(-3,3))
+
+# add axes
+
+axis(1, at = seq(0, 50, 5))
+axis(2, at = seq(-3, 3, by=0.5), labels=FALSE, tck=-0.01)
+axis(2, at = seq(-3, 3, by=1), las=2)
+box(which = 'plot', bty = 'o')
+mtext( 'Page 1', side = 3, out = TRUE, cex = 0.5 )
+box(which = 'outer')
+box(which = 'figure')
+
+abline( h = 0, lty = 'longdash' )
+
+maxValue <- max(Variable)
+index <- which( Variable == maxValue )
+label <- names(Variable)[index]
+text(x = index, y = maxValue+0.4, labels = label)
+```
+  
+- 4.7 Exercise - make a plot using "Variable" object:
+1. width = 3 in, height = 3 in;
+2. all four outer margins = 3 lines;
+3. plot data points labels in place of data points;
+   hint: plot(1:10, type = 'none') will plot figure frame, but not data points;
+4. omit plotting x-axis and its label;
+5. modify y-axis label, add figure title, and add date in the bottom outer margin;
+6. plot only first character of data label
+   hint: use substring(string, first, last) to extract the first character;
+7. plot data labels one half size;
+8. use color = 1:7 to color the text;
+9. add figure box.
+
+```{r echo = FALSE, fig.width = 5, fig.height = 5}
+par( pin = c(3,3), oma = c(3,3,3,3) )
+plot(Variable,type = "n",xaxt="n",xlab="",ylab="ylab",axes = F)
+title("main")
+axis(2, at = seq(-2, 2, by=1), labels=T)
+mtext( Sys.Date(), side =1, out = TRUE )
+labels = substring(names(Variable),1,1)
+text(x = c(1:length(Variable)), y = Variable,labels = labels,col =1:7 )
+box(which = 'figure')
+```
+
+
+``` {r include = FALSE}
+options(warn = -1); par(oldPar); options(warn = 0)
+```
+
+## 5. Example Dataset  
+
+##### NeveRM, "A collection of breast cancer cell lines for the study of functionally distinct cancer subtypes"; [PMC2730521](https://www.ncbi.nlm.nih.gov/pmc/articles/PMC2730521/)
+
+- 5.1 load data
+``` {r }
+load("/Users/balaji/Downloads/plots/NeveG.RData")
+Data <- NeveG_data
+```
+- 5.2 look at the data
+``` {r results = 'hide'}
+head(Data)
+str(Data)
+summary(Data)
+```
+
+- 6.3 calculate descriptive statistics
+``` {r }
+temp = Data[,-c(1:4)]
+means <- apply(temp, 2, mean, na.rm = T)
+medians <- apply(temp, 2, median, na.rm = T)
+stdevs <- apply(temp, 2, sd, na.rm = T)
+sems <- apply(temp, 2, function(x){
+              n <- sum(!is.na(x))
+              sd(x, na.rm = T)/sqrt(n)})
+size <- apply(temp, 2, function(x) sum(!is.na(x)))
+cv <- stdevs/means*100
+
+## combine stats with data.frame() function
+Stat <- data.frame(N = size, Mean = means, Median = medians, SD = stdevs, SEM = sems, CV = cv)
+
+## save as *.RData object
+save(Stat, file = 'Stats.RData')
+
+## save as .csv file
+write.csv(Stat, file = 'Stats.csv')
+```
+
+## 6. Generate Plots
+
+### 6.1 Histogram
+``` {r fig.width = 12, fig.height = 4, out.width = '60%', out.height = '60%'}
+par(mfrow = c(1,2))
+
+hist(Variable) ## freq = TRUE/FALSE; breaks = the number of bins
+
+# overlay normal curve
+hist(Variable, freq = FALSE, col = 'skyblue', border = 'black')
+curve(dnorm(x, mean = mean(Variable), sd = sd(Variable)), lwd=2, add=T)
+```
+
+### 6.2 Density Plot
+``` {r fig.width = 12, fig.height = 4, out.width = '60%', out.height = '60%'}
+par(mfrow = c(1,2))
+Density = density(Variable) ## kernel density estimate (smoothing function)
+plot(Density)
+plot(Density, main = 'Density plot', sub = '', xlab = 'log2', lwd = 2)
+lines(density(Variable+0.5), lwd = 2, col = 'red')
+```
+
+### 6.3 Dot Plot
+``` {r fig.width = 10, fig.height = 5, out.width = '60%', out.height = '60%'}
+par(mfrow = c(1,2))
+stripchart( Data[, c('ABAT', 'CALD1')],
+    vertical = TRUE, method = 'stack',
+    pch = 16, col = 'green3',
+    ylab = 'log2 Expression', main = 'Dot plot')
+x.coord = c(1,2)
+y.coord = Stat[c('ABAT','CALD1'), 'Median']
+segments(x0 = x.coord+0.2,  y0 = y.coord, x1 = x.coord-0.2, y1 = y.coord,
+  lwd = 2, cex = 1.5)
+
+# use formula to plot data points by category
+stripchart( ESR1 ~ geneCluster, data = Data,
+    vertical = FALSE, method = 'jitter', jitter=0.2, 
+    pch = 16, col = c('red', 'orange', 'blue'), 
+    group.names = levels(Data$geneCluster),
+    main = 'Dot plot',
+    las =2)
+```
+
+### 6.4 Box Plot
+``` {r fig.width = 8, fig.height = 4, out.width = '50%', out.height = '50%'}
+boxplot(Data[, 5:10], col = 2:7, main='Box plot', ylab = 'log2', boxwex = 0.3)
+# boxplot(Data[, 5], plot=F)
+```
+
+### 6.5 Combine Box plot and Dot plot
+``` {r  fig.width = 10, fig.height = 5, out.width = '50%', out.height = '50%'}
+library(reshape2)
+mData <- melt(Data, measure.vars = 5:13, variable.name = 'Gene', value.name = 'GEX')
+
+# combine box plot and  dot plot
+par(oma = c(2,0,0,0))
+boxplot(GEX ~ ER+Gene, data = mData,
+        outline = FALSE, varwidth = TRUE,
+        col = c('coral','lightblue'),
+        main='Box plot + Dot plot',ylab = 'log2',
+        las = 2)
+stripchart(GEX ~ ER+Gene, data = mData,
+           method = 'jitter', vertical = TRUE,
+           pch=16, add=T)
+
+```
+
+### 6.5 Scatter Plot and Correlation
+``` {r  fig.width = 4, fig.height = 4, out.width = '20%', out.height = '20%'}
+
+# set variables
+x <- Data$ABAT
+y <- Data$ESR1
+limit <- range(c(x,y))
+r <- round(cor(x,y),2)
+
+# make plot
+par(pty='s')
+plot(x, y, ylim = limit, xlim = limit, xlab = 'ABAT', ylab = 'ESR1')
+abline(0,1)
+fit <- lm(y ~ x)
+abline(fit, col='blue')
+legend('bottomright', col = c('black','blue'), lty = 1, lwd = 2, 
+       legend = c('identity line', 'regression line'), cex=0.7)
+mtext(paste('r', r, sep=' = '))
+title('Scatter plot and correlation')
+```
+
+``` {r  fig.width = 6, fig.height = 4, out.width = '20%', out.height = '20%'}
+# R object built-in diagnostic graphics
+par(mfrow = c(2,2), pty='m', mar = par()$mar+c(-1,0,-2,0))
+plot(fit)
+```
+
+### 6.5 Bar Plots
+
+``` {r  fig.width = 6, fig.height = 4, out.width = '20%', out.height = '20%'}
+par(mfrow = c(1,2))
+
+# plot ordered means
+d <- Stat$Mean
+name <- rownames(Stat)
+ord <- order(d)
+barplot( 2^d[ord], names = name[ord], las=2, density = 20, col='lightblue', border='darkblue')
+title(ylab = 'Mean Expression', main = 'Bar plot')
+
+# calculate group estimates (means, standard errors), t- and p-value
+x <- Data$TFF1[Data$ER == '[+]']
+y <- Data$TFF1[Data$ER == '[-]']
+name <- c('ER+','ER-')
+x.mean <- mean(x)
+y.mean <- mean(y)
+x.sem <- sd(x)/sqrt(length(x))
+y.sem <- sd(y)/sqrt(length(y))
+
+test <- t.test(x=x, y=y, var.equal = TRUE)
+tval <- round(test$statistic, 2)
+pval <- signif(test$p.value, 1)
+
+
+# plot barplot with error bars
+d <- data.frame(Mean = c(x.mean, y.mean), SEM = c(x.sem, y.sem))
+yaxis.max <- max(d$Mean + d$SEM)
+bar <- barplot( d$Mean, names = name, ylab = 'log2', ylim = c(0, yaxis.max))
+segments(x0 = bar, y0 = d$Mean-d$SEM, x1 = bar, y1 = d$Mean+d$SEM, lwd=2)
+title(sub = paste('P-value = ', pval, ', t-value = ', tval, sep = ''), 
+      main = 'Bar plot with error bars')
+
+
+# plot barplot with error bars
+d <- data.frame(Mean = c(x.mean, y.mean), SEM = c(x.sem, y.sem))
+yaxis.max <- max(d$Mean + d$SEM)
+bar <- barplot( d$Mean, names = name, ylab = 'log2', ylim = c(0, yaxis.max))
+segments(x0 = bar, y0 = d$Mean-d$SEM, x1 = bar, y1 = d$Mean+d$SEM, lwd=2)
+title(sub = paste('P-value = ', pval, ', t-value = ', tval, sep = ''), 
+      main = 'Bar plot with error bars')
+```
+
+- 6.5.1 Exercise - plot error bars using arrows() function:  
+hint: check ?arrows arguments;  
+modify 'angle', 'code' (necessary), and 'length' (optional)
+```{r echo=FALSE}
+d <- data.frame(Mean = c(x.mean, y.mean), SEM = c(x.sem, y.sem))
+yaxis.max <- max(d$Mean + d$SEM)
+bar <- barplot( d$Mean, names = name, ylab = 'log2', ylim = c(0, yaxis.max))
+arrows(x0 = bar, y0 = d$Mean-d$SEM, x1 = bar, y1 = d$Mean+d$SEM, lwd=2,
+       code=3,length = 0,angle = 30)
+title(sub = paste('P-value = ', pval, ', t-value = ', tval, sep = ''), 
+      main = 'Bar plot with error bars')
+```
+
+### R Session Info
+``` {r}
+sessionInfo()
+```

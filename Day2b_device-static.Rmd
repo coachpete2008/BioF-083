@@ -1,0 +1,202 @@
+---
+title: "R Graphics Devices"
+output: word_document
+---
+
+```{r setup, cache=FALSE, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width=4, fig.height=4, dpi=300, warning=FALSE, message=FALSE)
+```
+``` {r include = FALSE }
+oldPar = par()
+```
+
+## I. Static Displays
+
+A device in R is the medium to produce a graphical output. This can be the *screen* device or a *file* device.    
+The command ?Devices lists all available graphics devices.
+
+##### --------------------------------------------------------------------------------------------------------
+
+### 1. Set Environment  
+
+``` {r  warning = FALSE}
+setwd("/Users/balaji/Downloads/plots")
+load('/Users/balaji/Downloads/plots/helperFunctions.RData')
+load('/Users/balaji/Downloads/plots/NeveG.RData')
+Data <- NeveG_data[, -(1:4)]
+Info <- NeveG_data[,1:4]
+
+library(datasets); library(forecast);library(ggfortify);
+library(grid); library(gridExtra); library(OpenStreetMap); library(rgdal)
+```
+
+### 2. The *screen* device 
+
+Commonly the default device, which can be launched with a plotting function or command windows(), quartz(), or x11()on Windows, Mac, and Unix/Linux, respectively.  
+
+Multiple devices can be opened, but plotting can be directed only to one device at a time; every open device is assigned an integer.  
+-  dev.list() lists all open devices  
+-  dev.cur() lists active device  
+-  dev.set(integer) activates device  
+-  dev.off() closes device  
+
+- 2.1 Open and navigate multiple devices  
+
+``` {r results = 'hide', fig.show = 'hide'}
+dev.list()
+
+plot(1:10)
+  dev.cur()
+    dev.list()
+    
+windows(w=4,h=3)
+  pie(1:10)
+
+windows(w=4,h=3)
+  barplot(rep(1,10))
+
+windows(w=4,h=3)
+  plotPoints()
+    
+dev.list()
+dev.cur()
+
+dev.off(3)
+
+dev.set(4)
+title('windows 4')
+dev.off(4)
+
+dev.list()
+
+dev.off(5)
+
+dev.off()
+
+```
+
+
+### 3. Examples of graphics *file* devices 
+
+- 3.1 PDF (vector format)  
+
+Good for printing (good quality of line-type graphics), however inefficient if a plot has a lot of data points.
+
+``` {r message = FALSE, fig.width = 10, fig.height = 10}
+
+# open graphics device
+#pdf('Fig_PairsHist.pdf', width = 6, height = 6)
+
+# make figure (page 1)
+par(oma = c(2,2,2,2))
+    pairs(Data[,1:4], 
+          lower.panel = NULL,
+          upper.panel = function(x,y, ...){
+            points(x, y, col = 'darkgrey', pch=16)
+              abline(lsfit(x,y), col = 'red')})
+    mtext('Fig_PairsHist.pdf, Page 1', outer=T, adj = 0, side =1)
+ # make figure (page 2)         
+par(mfrow = c(3,3))
+    for (i in 1:ncol(Data)){
+      hist(Data[,i], col = 'gold', 
+           main = colnames(Data)[i], xlab = 'log2 GEX')
+    }
+mtext('Fig_PairsHist.pdf, Page 2', outer=T, adj= 0, side = 1 )
+
+# close device    
+#dev.off()        
+```
+
+- 3.2 TIFF/PNG (bitmap format)    
+
+Good for plots with large number of points, web-based plots, or journal publishing.
+
+``` {r fig.width = 8, fig.height = 6, dpi = 300}
+
+## PLOT TIFF
+
+#.. prepare data
+data(AirPassengers)
+d <- AirPassengers
+d.arima <- auto.arima(d)
+d.forecast <- forecast(d.arima, level = c(99), h = 48)
+
+#.. open graphics device
+#tiff('Fig_TimeSeries.tiff', width = 5, height = 4, units = 'in', res = 300, compress='lzw')
+
+#.. make figure
+p1 <- autoplot(d.forecast, conf.int.fill = 'yellow',  conf.int.alpha = 0.5, ts.col = 'blue3', predict.col = 'red') + theme_bw()
+p2 <-  labs(x = "Year", y = "Passengers (Thousands)", title = "Airline Passenger Numbers 1949-1960")
+grid.arrange(p1+p2, right = textGrob("ARIMA 99CI for the forecast", rot = -90, vjust = 1))
+
+#.. close device    
+#dev.off()
+```
+
+
+``` {r fig.width = 3, fig.height = 3, dpi = 150}
+## PLOT PNGs
+
+#..prepare data
+
+#..get coordinates
+#launchMapHelper()
+
+map.type = c("bing", "apple-iphoto", "stamen-watercolor")
+UL <- c(lat= 39.06184913429154,   lon= -78.7060546875)
+LR <- c(lat= 35.24561909420681,   lon= -74.1796875)
+text.colo <- c('white', 'black', 'black')
+
+#.. open graphics device
+#png('Map_%1d.png', units='in', width = 4, height = 4, res = 150)
+
+#..make figures
+for (i in 1:length(map.type)){
+  map <- openmap(UL, LR, minNumTiles=10, type= map.type[i])
+    plot(map)
+      mtext(map.type[i], side = 1, adj=0.8, line = 2, col = text.colo[i])
+}
+
+#.. close device
+#dev.off()
+```
+- 3.3 Exercise: output a figure with:
+1. File 1 pdf(): page size in inches: 10w x 8h; 2-pages in one file;
+2. File 2 tiff(): page size in inches: 44w x 4h; res=300; compressed (lzw);
+3. use R pre-loaded data mtcars and plots of your choice
+
+```{r fig.width=10, fig.height=10}
+data(mtcars)
+head(mtcars)
+?mtcars5
+brand = sapply(strsplit(rownames(mtcars), ' '), function(x) x[1])
+table(brand)
+
+#pdf('File_1.pdf', width=10, height=8)
+ord = order(mtcars$hp, decreasing = TRUE)
+plot(mtcars$hp[ord], ylab='gross horsepower', xlab='rank',
+     main="Data obtained in mid-1970s", type='h', lwd=1, ylim=c(0,max(mtcars$hp)))
+text((1:nrow(mtcars)+0.3), mtcars$hp[ord], rownames(mtcars)[ord],
+     srt=90, cex=1, adj=1, col='blue')
+
+par(oma=c(0,8,0,2))
+dat = mtcars[,c('cyl','carb')]
+barplot(t(dat[rev(ord),]), beside=F, horiz = T, las=2, xlab='count', main='Data ordered by "gross horsepower"', col=c('grey40','grey90'))
+legend('bottomright', c('cylinders','carburetors'), fill=c('grey40','grey90'))
+#dev.off()
+
+#tiff('File_2.tiff', units='in', res=300, width=4, height=4, compression = 'lzw')
+par(pty='s')
+plot(mtcars$carb, mtcars$qsec, cex=0.5, pch=16, main='Data otained in mid-1970s')
+abline(lm(mtcars$qsec~mtcars$carb))
+#dev.off()
+
+
+```
+
+
+- [10 tips for making R graphics look good]:(http://blog.revolutionanalytics.com/2009/01/10-tips-for-making-your-r-graphics-look-their-best.html)
+
+

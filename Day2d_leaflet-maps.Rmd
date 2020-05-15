@@ -1,0 +1,122 @@
+---
+title: "Working with Maps"
+output: word_document
+always_allow_html: yes
+---
+
+```{r setup, cache=FALSE, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width=4, fig.height=4, dpi=300, warning=FALSE, message=FALSE)
+```
+``` {r include = FALSE }
+oldPar = par()
+```
+
+## I. Package {leaflet}
+
+Leaflet is one of the most popular open-source JavaScript libraries for interactive maps. This R package makes it easy to integrate and control Leaflet maps in R.
+
+##### --------------------------------------------------------------------------------------------------------
+
+### 1. Set Environment  
+
+``` {r  warning = FALSE}
+setwd("C:/Users/YO/Documents/R Graphics")
+
+library(datasets); library(leaflet); library(maps)
+library(grid); library(gridExtra); library(OpenStreetMap); library(rgdal)
+```
+
+### 2. The Map Widget  
+
+- 2.1 Basic rules  
+
+leaflet() returns a map widget object, to which graphics elements and layers can be added up with the "%>%" operator.  
+
+``` {r results = 'hide'}
+
+df = data.frame(Lat = -15:15, Long = 15:-15)
+
+m <- leaflet(df) %>% 
+  
+  addCircles(~Lat, ~Long, col = 'red') %>%
+  addRectangles(lat1 = 0, lng1 = 0, lat2 = 10, lng2 = 10, fill=F) %>%
+  addMarkers(lat = c(7,4), lng = c(7,-4), popup = 'text') %>%
+  addCircleMarkers(lat = 5, lng = 5, radius = 20, color = 'orange', fill = TRUE) %>%
+  setView(lat = 5, lng = 5, zoom = 0) %>% addTiles() %>%
+  setView(lat = 5, lng = 5, zoom = 4) %>%
+  setView(lat = 5, lng = 5, zoom = 19) %>%
+  setView(lat = 5, lng = 5, zoom = 5) %>%
+  addPopups(lat = 10, lng = 4, "square", options = popupOptions(closeButton = FALSE))
+
+print(m)
+
+?addCircles
+```
+- 2.1 An example
+
+[coordinates can be found here]:(http://www.distancesfrom.com/Latitude-Longitude.aspx)
+
+``` {r }
+Lat = 39.0025
+Long = -77.109
+txt = '<b>FAES</b></p>Nov 16-17'
+
+# Create map object
+m <- leaflet() %>%
+
+# Add default OpenStreetMap map tiles
+addTiles() %>%
+
+# Zoom at the location
+setView(lat = Lat, lng = Long, zoom = 16) %>%
+
+# Add popup
+addMarkers(lat = Lat, lng = Long, popup = txt) %>%
+
+# Add filled marker
+addCircleMarkers(lat = Lat, lng = Long, radius = 30, color = 'cornflowerblue', fill = TRUE)
+
+print(m)
+
+# Export map from RStudio browser to png or html file
+```
+
+### 2. Use data with maps
+
+- 2.1 Use paths to add polygons
+``` {r }
+library(maps)
+mapStates = map("state", fill = TRUE, plot = FALSE)
+leaflet(data = mapStates) %>% addTiles() %>%
+  addPolygons(fillColor = topo.colors(10, alpha = NULL), stroke = FALSE)
+```
+
+
+- 2.2 Make choropleth map  
+
+[data from]:(https://github.com/bahar/WorldCityLocations):  visulize citie's altitude
+
+``` {r }
+#https://github.com/bahar/WorldCityLocations
+wct <- read.delim("misc/World_Cities_Location_table.txt", stringsAsFactors=FALSE, sep=';',head=F) 
+colnames(wct) <- c('id', 'country', 'city', 'latitude', 'longitude', 'altitude')
+
+
+pal <- colorQuantile("YlOrRd", NULL, n = 9)
+
+city_popup <- paste0("<strong>State: </strong>", 
+                      wct$country, 
+                      "<br><strong>City: </strong>", 
+                      wct$city,
+                      "<br><strong>altitude: </strong>", 
+                      wct$altitude)
+
+m <- leaflet(data = wct) %>% addTiles() %>%
+        addCircleMarkers(fillColor = ~pal(wct$altitude),
+          radius = 2, stroke = FALSE, fillOpacity = 1,
+           popup = city_popup) %>%
+            setView(0,0, zoom = 2)
+print(m)             
+```

@@ -1,0 +1,263 @@
+---
+title: "Specialty Figures"
+output: word_document
+---
+
+```{r setup, cache=FALSE, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width=4, fig.height=4, dpi=300, warning=FALSE, message=FALSE)
+```
+``` {r include = FALSE }
+oldPar = par()
+```
+
+## I. Menu
+
+
+
+##### --------------------------------------------------------------------------------------------------------
+
+### 1. Set Environment  
+
+``` {r  warning = FALSE}
+setwd("C:/Users/michaloa/Desktop/BioTech76")
+load("helperFunctions.Rdata")
+load('NeveG.RData')
+Data <- NeveG_data[, -(1:4)]
+Info <- NeveG_data[,1:4]
+
+```
+
+### 2. Word cloud
+
+A word cloud is a text mining method that highlights the most frequently used words in a text. 
+
+``` {r }
+library(wordcloud); library(tm); library("SnowballC"); library(RColorBrewer)
+
+# get a text file
+fileInput <- "wordcloud_input.txt"
+input <- readLines(fileInput)
+
+# format as a corpus
+docs <- Corpus(VectorSource(input))
+#inspect(docs)
+
+# text transformations
+toSpace <- content_transformer(function (x , pattern ) gsub(pattern, " ", x))
+docs <- tm_map(docs, toSpace, "/")
+docs <- tm_map(docs, toSpace, "@")
+docs <- tm_map(docs, toSpace, "\\|")
+
+# Convert the text to lower case
+docs <- tm_map(docs, content_transformer(tolower))
+# Remove numbers
+docs <- tm_map(docs, removeNumbers)
+# Remove english common stopwords
+docs <- tm_map(docs, removeWords, stopwords("english"))
+# Remove your own stop word
+# specify your stopwords as a character vector
+docs <- tm_map(docs, removeWords, c("ttt", "aaaa")) 
+# Remove punctuations
+docs <- tm_map(docs, removePunctuation)
+# Eliminate extra white spaces
+docs <- tm_map(docs, stripWhitespace)
+# Text stemming
+docs <- tm_map(docs, stemDocument)
+
+# Create a term-document matrix
+dtm <- TermDocumentMatrix(docs)
+m <- as.matrix(dtm)
+v <- sort(rowSums(m),decreasing=TRUE)
+d <- data.frame(word = names(v),freq=v)
+#head(d, 10)
+
+set.seed(5678)
+wordcloud(words = d$word, freq = d$freq, min.freq = 2,
+          max.words=200, random.order=FALSE, rot.per=0.2, 
+          colors=brewer.pal(8, "Accent"))
+```
+
+
+### 2. PCA plot - 2D
+``` {r fig.width = 6, fig.hei = 6}
+
+library('corpcor')
+library('ggplot2')
+
+load('Data_Neve.RData')
+Data <- dat.Neve
+Info <- inf.Neve
+
+dx = as.matrix(Data)
+svd = fast.svd(dx - rowMeans(dx))
+v = svd$v; rownames(v) = colnames(dx)
+pca = list(v = v, d = svd$d)
+
+pcaVar = round((pca$d^2) / sum(pca$d^2) * 100, 2)
+x.lab = sprintf("PC1 (%.2f%% variance)", pcaVar[1])
+y.lab = sprintf("PC2 (%.2f%% variance)", pcaVar[2])
+
+pcaDat = data.frame(sample=colnames(dx),
+                      PC1=pca$v[,1], PC2=pca$v[,2],
+                      group = Info$geneCluster)
+
+pcaPlot = ggplot(pcaDat, aes(PC1, PC2, color=group)) +
+    geom_point(stat="identity", size=3) +
+    xlab(x.lab) + ylab(y.lab) +
+    ggtitle(sprintf("PCA")) +
+    theme(axis.ticks=element_blank(), axis.text.x=element_text(angle=-90))
+plot(pcaPlot)
+```
+
+
+### 2. PCA plot - 3D
+``` {r }
+
+library('corpcor')
+library('rgl')
+
+load('Data_Neve.RData')
+Data <- dat.Neve
+Info <- inf.Neve
+
+dx = as.matrix(Data)
+svd = fast.svd(dx - rowMeans(dx))
+v = svd$v; rownames(v) = colnames(dx)
+pca = list(v = v, d = svd$d)
+
+pcaVar = round((pca$d^2) / sum(pca$d^2) * 100, 2)
+x.lab = sprintf("PC1 (%.2f%% variance)", pcaVar[1])
+y.lab = sprintf("PC2 (%.2f%% variance)", pcaVar[2])
+```
+
+- 2.1 Interactive plot  
+
+
+
+- 2.1 3D-plot  
+
+``` {r fig.width = 8, fig.height = 8}
+library(scatterplot3d)
+color <- factor(Info$geneCluster)
+levels(color) <- c('cornflowerblue', 'coral3', 'green3')
+angles <- c(60, 120, 240, 320)
+
+
+scatterplot3d(x = pca$v[,1],y = pca$v[,2], z = pca$v[,3],
+              main= paste("PCA 3D scatterplot,", "default angle"),
+              xlab = 'PC1', ylab = 'PC2', zlab = 'PC3',
+              color = color, pch = 16, cex.symbols = 2)
+              
+
+par(mfrow = c(2,2))
+for(i in 1: length(angles)){
+  scatterplot3d(x = pca$v[,1],y = pca$v[,2], z = pca$v[,3],
+              main= paste("PCA 3D,", "angle =", angles[i[]]),
+              xlab = 'PC1', ylab = 'PC2', zlab = 'PC3',
+              color = color, pch = 16, cex.symbols = 2,
+              angle = angles[i])
+}
+```
+
+### 2. Venn diagram
+``` {r }
+
+library(VennDiagram)
+library(colorspace)
+
+A <- sample(1:1000, 400, replace = FALSE)
+B <- sample(1:1000, 600, replace = FALSE)
+C <- sample(1:1000, 350, replace = FALSE)
+D <- sample(1:1000, 550, replace = FALSE)
+
+venn.diagram(list('A' = A, 'B' = B),
+             filename = 'Venn-2.tiff',
+             col = rainbow_hcl(2, alpha = 1),
+             fill = rainbow_hcl(2, alpha = 0.5),
+             cex = 3, cat.cex = 3)
+
+venn.diagram(list('A' = A, 'B' = B, 'C' = C),
+             filename = 'Venn-3.tiff',
+             col = rainbow_hcl(3, alpha = 1),
+             fill = rainbow_hcl(3, alpha = 0.5),
+             cex = 3, cat.cex = 3)
+
+venn.diagram(list('A' = A, 'B' = B, 'C' = C, 'D' = D),
+             filename = 'Venn-4.tiff',
+             col = rainbow_hcl(4, alpha = 1),
+             fill = rainbow_hcl(4, alpha = 0.5),
+             cex = 3, cat.cex = 3)
+```
+
+### 2. Genomic plots - ggbio
+
+``` {r }
+
+#source("https://bioconductor.org/biocLite.R"); biocLite("biovizBase", "ggbio", "RBGL", "GenomicRanges", "Homo.sapiens",  "EnsDb.Hsapiens.v75")
+# if you need to update Bioconductor run:  biocLite()
+
+library(ggbio)
+library(biovizBase)
+library(GenomicRanges)
+library(EnsDb.Hsapiens.v75)
+
+#### Circular plot
+
+data("CRC", package = "biovizBase")
+
+##.. single sample
+gr.crc1 <- crc.gr[values(crc.gr)$individual == "CRC-1"]
+p <- ggbio() +
+circle(gr.crc1, geom = "link", linked.to = "to.gr", aes(color = rearrangements)) +
+circle(gr.crc1, geom = "point", aes(y = score, size = tumreads),
+color = "red", grid = TRUE) + scale_size(range = c(1, 2.5)) +
+circle(mut.gr, geom = "rect", color = "steelblue") +
+circle(hg19sub, geom = "ideo", fill = "gray70") +
+circle(hg19sub, geom = "scale", size = 2) +
+circle(hg19sub, geom = "text", aes(label = seqnames), vjust = 0, size = 3)
+p
+
+
+##.. multiple samples
+grl <- split(crc.gr, values(crc.gr)$individual)
+## need "unit", load grid
+library(grid)
+crc.lst <- lapply(grl, function(gr.cur){
+print(unique(as.character(values(gr.cur)$individual)))
+cols <- RColorBrewer::brewer.pal(3, "Set2")[2:1]
+names(cols) <- c("interchromosomal", "intrachromosomal")
+p <- ggbio() + circle(gr.cur, geom = "link", linked.to = "to.gr",
+aes(color = rearrangements)) +
+circle(hg19sub, geom = "ideo",
+color = "gray70", fill = "gray70") +
+scale_color_manual(values = cols) +
+labs(title = (unique(values(gr.cur)$individual))) +
+theme(plot.margin = unit(rep(0, 4), "lines"))
+})
+arrangeGrobByParsingLegend(crc.lst, widths = c(4, 1), legend.idx = 1, ncol = 3)
+
+
+#### Plot gene mode (ENSEMBL)
+ensdb <- EnsDb.Hsapiens.v75
+autoplot(ensdb, GenenameFilter("GREB1"))
+
+##.. Manhattan plot
+
+# prep example data
+snp <- read.table(system.file("extdata", "plink.assoc.sub.txt", package = "biovizBase"), header = TRUE)
+gr.snp <- transformDfToGr(snp, seqnames = "CHR", start = "BP", width = 1)
+gr.snp <- keepSeqlevels(gr.snp, as.character(1:22))
+data(ideoCyto, package = "biovizBase")
+seqlengths(gr.snp) 
+gr.snp <- gr.snp[!is.na(gr.snp$P)]
+values(gr.snp)$pvalue <- -log10(values(gr.snp)$P)
+#head(gr.snp)
+
+autoplot(gr.snp, geom = "point", coord = "genome", aes(y = pvalue))
+
+plotGrandLinear(gr.snp, aes(y = pvalue), color = c("#7fc97f", "#fdc086"),
+cutoff = 3, cutoff.color = "blue", cutoff.size = 0.2)
+
+```

@@ -1,0 +1,197 @@
+---
+title: "Graphics Systems in R"
+output: word_document
+---
+
+```{r setup, cache=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width = 3.6, fig.height = 3.6, dpi = 100)
+```
+``` {r include = FALSE}
+oldPar = par()
+```
+
+## II. Grid graphics
+
+{grid} is an alternative, low-level graphics system in R developed by Paul Murrell in the 1990's. {grid} provides large flexibility in the layout of graphics and enables creating of editable graphical objects. {grid} itself does not provide high-level functions to create complete plots, but is a graphics engine behind other packages such as {lattice} and {ggplot2}.
+
+- an add-on package that needs to be loaded into an R session
+- viewport defines context for drawing (location and size)
+- grob (graphical object) defines drawing shape, e.g., line, circle, polygon, etc.
+- gpar(parameter = value) sets parameters of the graphics
+- get.gpar() lists the gpar parameters
+
+***
+
+
+### 1. Set Environment  
+```{r }
+setwd("/Users/balaji/Downloads/plots")
+load('helperFunctions.RData')
+library('grid')
+```
+
+### 2. Create Viewports and Plot Shapes  
+
+vieport() defines a rectangular region and its coordinates; multiple viewports can be defined within the plotting area. A default plotting region is defined with "npc" units (normalised parent coordinates), where the origin of the viewport is (0, 0) and the viewport has a width and height of 1 unit;  for example, (0.5, 0.5) is the centre of the viewport,  where left corner is (x=0, y=0) and right corner is (x=1, y=1). 
+
+```{r }
+# draw borders of the starting viewport:
+grid.rect(gp = gpar(lty='dashed'))
+grid.text(label = "(0,0)", x = 0+0.05, y=0+0.03)
+grid.text(label = "(1,1)", x = 1-0.05, y=1-0.03 )
+
+# define viewports:
+VP1 <- viewport(x = 0.25, y = 0.75, width = 0.4, height = 0.4)
+VP2 <- viewport(x = 0.75, y = 0.25, width = 0.4, height = 0.4)
+VP3 <- viewport(x = 0.5, y = 0.5, width = 0.4, height = 0.4, angle = 45)
+
+# open viewports and draw graphical elements:
+#...square, x-axis, points
+pushViewport(VP1)
+  grid.rect()
+  grid.xaxis( at = seq(0, 1, by = 0.2))
+  grid.circle(x = c(0.2, 0.6, 0.8), y = c(0.4, 0.8, 0.5), r=0.02)
+upViewport()
+
+#...circle in a box
+pushViewport(VP2)
+  grid.rect(gp = gpar(fill = 'black'))
+  grid.circle()
+upViewport()
+
+#...rotate green box / repeat a few times to see the effect in child viewports
+pushViewport(VP3)
+  grid.rect( gp = gpar(fill = 'lightgreen') )
+
+  upViewport()
+  
+#..read and insert a png image
+gridImage(image.file = '/Users/balaji/Downloads/plots/Hela.png')
+
+#..nested viewports
+for(i in 1:10)
+{
+  pushViewport(VP3)
+  grid.rect( gp = gpar(fill = 'lightgreen') )
+}
+upViewport(0)
+```
+
+### 3. Generate grobs
+
+- draw and edit shapes with grid.*()
+
+``` {r fig.width=2, fig.height=2}
+# draw
+pushViewport(VP1)
+grid.rect(name="box")
+grid.circle(r=0.1, gp=gpar(fill='black'))
+
+# edit and change a parameter
+grid.edit("box", gp=gpar(fill="lightyellow3"))
+
+# remove
+grid.remove("box")
+#upViewport()
+```
+
+### 4. Combine grobs
+- store and edit shapes with \*Grob(); \*Grob produces a graphical object, but no output
+- list objects with gList() and draw with grid.draw() 
+
+``` {r fig.width = 3, fig.height = 3}
+spot <- circleGrob(r=0.3)
+spot <- editGrob(spot, gp = gpar(fill = 'blue'))
+txt <- textGrob('Hello world!', gp = gpar(col = 'white', cex = 2))
+my.grob <- gList(spot, txt)
+grid.draw(my.grob)
+```
+
+#### if interested in more try  [https://www.stat.auckland.ac.nz/~paul/grid/grid.html](https://www.stat.auckland.ac.nz/~paul/grid/grid.html)
+
+### 5. {lattice} and Trellis Plots 
+
+graphs that help examine multivariate relationships by plotting a variable conditioned on one or more other variables.
+
+### 5. Load lattice and data
+``` {r }
+library(lattice)
+load('/Users/balaji/Downloads/plots/NeveG.RData')
+Data <- NeveG_data
+```
+
+- 5.1 density plots
+``` {r fig.width = 8, fig.height = 8}
+densityplot(~ABAT+CALD1+ESR1|ER*geneCluster, data=Data,
+            main = 'Density plots by ER status and gene cluster', 
+            auto.key=list(space='right'))
+
+```
+
+- 5.2 scatter plots
+``` {r fig.width = 5, fig.height = 8}
+
+# group x,y and condition x-y relationship on one variable
+splom(~Data[,5:7]|Data$ER, groups = Data$geneCluster,
+      layout = c(1,2),
+      main = 'Scatter plots by ER status', 
+      auto.key = list(space='top', title='Cluster'))
+```
+
+- 5.3 box plots with conditioning on a continous variable
+``` {r fig.width = 8, fig.height = 4}
+# cut continuous variable into intervals
+age <- cut(Data$age, 3)
+b <- bwplot(~Data$LARGE|age*Data$ER, main = 'LARGE expression by ER status and age category', xlab = 'log2', ylab = 'Box plots')
+update(b, fill = 'lightgrey')
+```
+
+- 5.4 See R help pages for more types of lattice plots
+``` {r echo=FALSE}
+#help(lattice)
+```
+- 5.5 Exercise: finish the combined grid/lattice plot:  
+1. create two viewports (blue and grey here); hint: use npc coordinates (0 to 1) and center of colored rectangles;
+2. use print(scatterLattice, newpage=FALSE) to place the lattice plot in the grey viewport
+
+```{r }
+grid.rect(gp=gpar(fill='black', lty='solid'))
+VP1 <- viewport(x = 0, y = 0.5, width = 0.25, height = 1)
+pushViewport(VP1)
+grid.rect(gp=gpar(fill="steelblue3"))
+grid.text("Figure1", x=0.7,y=0.98,gp=gpar(cex=1.5, col='black'))
+upViewport()
+grid.text("MEGF9 ~ Age|Cluster", x=0.5, y=0.95, gp=gpar(cex=2,
+                                    col='steelblue3'))
+VP2 <- viewport(x = 0.6, y = 0.5,width = 0.6,height = 0.6)
+pushViewport(VP2)
+grid.rect(gp=gpar(fill='lightgrey', lty='solid'))
+
+scatterLattice <- xyplot(MEGF9 ~ ageY|geneCluster, data=Data, layout=c(3,1),
+                         type = c("p","r"), pch=16, col='black')
+print(scatterLattice, newpage=FALSE)
+```
+
+```{r echo = FALSE, fig.width=6, fig.height=6}
+grid.rect(gp=gpar(fill='black', lty='solid'))
+scatterLattice <- xyplot(MEGF9 ~ ageY|geneCluster, data=Data, layout=c(3,1), type = c("p","r"), pch=16, col='black')
+grid.text("MEGF9 ~ Age|Cluster", x=0.5, y=0.95, gp=gpar(cex=2, col='steelblue3'))
+VP1 <- viewport(x = 0.1, y = 0.5, width = 0.2, height = 1)
+VP2 <- viewport(x = 0.6, y = 0.5, width = 0.6, height = 0.6)
+pushViewport(VP1)
+grid.rect(gp=gpar(fill='steelblue3', lty='solid'))
+grid.text("Figure 1", x=0.5, y=0.95, gp=gpar(cex=2))
+upViewport()
+pushViewport(VP2)
+grid.rect(gp=gpar(fill='grey', lty='solid'))
+print(scatterLattice, newpage=FALSE)
+upViewport()
+```
+
+
+### R Session Info
+``` {r}
+sessionInfo()
+```

@@ -1,0 +1,164 @@
+---
+title: "Graphics systems in R"
+output: word_document
+---
+
+```{r setup, cache=FALSE, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width=4, fig.height=4, dpi=100, warnings=FALSE, message=FALSE)
+```
+``` {r include = FALSE }
+oldPar = par()
+```
+
+## III. Grammar of Graphics
+
+{ggplot2} is a high-level R package developed by Hadley Wickham based on Leland Wilkinson's concept of the grammar of graphics ("The Grammar of Graphics", 1999/2005).
+
+In practical sense, with ggplot2 building blocks of a plot are independently specified and then combined to create complex multi-layered graphics.
+
+Main building blocks  
+
+- data
+- aesthetic mapping 
+- geometric object 
+- statistical transformations
+- coordinate system
+- scales
+- themes
+- faceting
+
+Basic plotting functions  
+
+- qplot() - makes quick plots, resembles standard graphics
+- ggplot() - the main plot function, allows detailed control of the graphical elements
+ 
+##### --------------------------------------------------------------------------------------------------------
+
+### 1. Set Environment
+```{r message = FALSE, warning = FALSE}
+setwd("/Users/balaji/Downloads/plots")
+load('helperFunctions.RData')
+library(ggplot2)
+library(reshape2)
+library(grid)
+library(gridExtra)
+```
+
+### 2. Set Data
+``` {r }
+load('/Users/balaji/Downloads/plots/NeveG.RData')
+Data <- NeveG_data # data.frame, wide form
+mData <- melt(Data, measure.vars = 5:13, variable.name = 'Gene', value.name = 'GEX') # data.frame, long form
+```
+
+### 3. quickplot()
+```{r fig.width = 6, fig.height = 6}
+# prepare histograms
+f1A <- qplot(data = Data, ageY , geom=c('histogram'))
+f1B <- qplot(data = Data, MEGF9, geom=c('histogram'))
+# prepare plot with data points and smoothed line
+f2 <- qplot(data = Data, ageY, MEGF9, geom=c('point','smooth'))
+# prepare boxplots
+f3  <- qplot(data = Data, ER, ageY, geom = c('boxplot'))
+# arrange plots
+grid.arrange(f1A, f1B, f2, f3, ncol=2)
+```
+
+### 4. ggplot()
+
+- 4.1 mapping data to aesthetics (choosing axis, color/fill, shape/linetype, size)
+``` {r }
+plot.data <- ggplot( data = mData, aes(x = geneCluster, y = GEX, fill = geneCluster) )
+plot.blanc <- ggplot( data = mData, aes(x = geneCluster, y = GEX, color = geneCluster) )
+
+```
+
+- 4.2 geoms (the actual marks plotted)
+``` {r }
+violin <- geom_violin()
+dot <- geom_jitter(shape = 16, position = position_jitter(0.2), size=1)
+box <- geom_boxplot(outlier.size = -1, width = 0.25, fill = 'antiquewhite', color = 'antiquewhite', alpha = 0.5)
+```
+
+- 4.3 stat 
+``` {r }
+stat.median <- stat_summary(fun.data=median, geom="point", shape=23, size=2)
+stat.error <- stat_summary(fun.data = mean_err, geom="pointrange")
+```
+
+- 4.4 theme and plot attributes
+``` {r }
+theme <- theme_bw()
+leg <- theme(legend.position = 'none')
+titles <- labs(title = "Violin Plots", x = "", y = "log2 gene expression")
+```
+
+- 4.5 scales
+``` {r }
+paint.fill <- scale_fill_manual(values = c("red","orange", "blue"))
+paint.col <- scale_color_manual(values = c("red","orange", "blue"))
+y.axis <- scale_y_continuous(breaks = seq(2,14,2))
+```
+
+- 4.6 combine layers
+``` {r }
+plot.data + violin + dot + box + titles + leg + y.axis + paint.fill + coord_flip()
+plot.blanc + geom_violin(trim = FALSE) + stat.error + titles + theme + leg + paint.col
+```
+
+### 5. Faceting
+
+- 5.1 Define subsets as the levels of a single grouping variable with facet_wrap()
+``` {r }
+dat.plot <- ggplot(data = mData, aes(x = GEX, fill = ER))
+histo <- geom_histogram(binwidth=1, position = 'identity', alpha = 0.6)
+panel.wrap <- facet_wrap(~Gene)
+
+dat.plot + histo + panel.wrap + labs(x = 'log2 Expression') + theme_light()
+```
+
+- 5.2 Define subsets as the crossing of two grouping variables with facet.grid()
+```{r }
+dat.plot <- ggplot(data = mData, aes(x = GEX, fill = ER))
+histo <- geom_histogram(binwidth=1, position = 'identity', alpha = 0.6)
+panel.grid <- facet_grid(ER ~ geneCluster)
+theme.bg <-  theme(panel.grid.major = element_blank(), panel.grid.minor = element_blank())
+
+dat.plot + histo + panel.grid + theme.bg
+
+```
+
+### 5. Good ggplot2 summary from R Studio
+
+[ggplot2-cheatsheet](https://www.rstudio.com/wp-content/uploads/2015/03/ggplot2-cheatsheet.pdf)
+
+### 6. Exercises
+
+- 6.1 inspect R dataset: diamonds
+
+```{r results = 'hide'}
+library(tidyverse)
+data(diamonds)
+diamonds
+?diamonds
+summary(diamonds)
+```
+- 6.2 make plots:
+1. histogram + density plot for the "price" variable"; hint: use geom_histogram(aes(y=..density..)) and geom_density
+2. scatterolot (carat-price) + non-linear smoother by cut; color points by cut
+
+```{r }
+ggplot(diamonds, aes(x = price)) + 
+  geom_histogram(aes(y=..density..), fill='lightblue', col='black') + 
+  geom_density(col='blue', fill='yellow', alpha=0.1)
+
+ggplot(diamonds, aes(x=carat, y=price,color=cut)) +
+  geom_point(alpha=0.5, size=0.5) + geom_smooth()
+```
+
+### R Session Info
+```{r}
+sessionInfo()
+```

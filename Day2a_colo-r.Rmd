@@ -1,0 +1,369 @@
+---
+title: "Using color in R"
+output: word_document
+---
+
+```{r setup, cache=FALSE, include=FALSE, warning = FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+library(knitr)
+opts_chunk$set(fig.width=4, fig.height=4, dpi=300, warning=FALSE, message=FALSE)
+```
+``` {r include = FALSE }
+oldPar = par()
+```
+
+## I. Color basics
+
+R uses base-16 number system (hexadecimal) to represent colors. Red, green, and blue are each represented by two characters (#rrggbb) and each character has one of possible symbols: (0-9, A-F)
+
+##### --------------------------------------------------------------------------------------------------------
+
+### 1. Set Environment
+```{r warning = FALSE}
+setwd("/Users/balaji/Downloads/plots")
+load('/Users/balaji/Downloads/plots/helperFunctions.Rdata')
+library(ggplot2)
+library(grid)
+library(gridExtra)
+library(RColorBrewer)
+library(colorspace)
+library(colorRamps)
+library(dendextend)
+library(gplots)
+library(hexbin)
+```
+
+### 2. Hexadecimal colors 
+  
+- 2.1 Hex notation  
+  
+In hexadecimal notation the value for each color ranges from 00 to FF , which is equivalent to 0 and 255 in base-10; two additional character can be added to represent transparency:  
+
+100% — FF; 95% — F2; 90% — E6; 85% — D9; 80% — CC; 75% — BF; 70% — B3; 65% — A6; 60% — 99; 55% — 8C;
+50% — 80; 45% — 73; 40% — 66; 35% — 59; 30% — 4D; 25% — 40; 20% — 33; 15% — 26; 10% — 1A; 5% — 0D;
+0% — 00  
+
+``` {r fig.width = 8, fig.height = 3}
+par(mfrow = c(1,2), mar = c(0,0,3,0) )
+paint = c(black = "#000000", white = "#FFFFFF", red = "#FF0000", blue = "#0000FF", green = "#00ff00")
+Var = rep(1, length(paint))
+pie(Var, col = paint, labels = paint, main='Hexadecimal notation')
+paint = paste(paint, '40', sep='')
+pie(Var, col = paint, labels = paint, main='Hexadecimal notation\nwith transparency')
+```
+  
+- 2.2 Named colors
+  
+R has 657 built-in named colors
+  
+``` {r fig.width = 7, fig.height = 3, dpi=300}
+all.colors <- colors()
+str(all.colors)
+
+str(all.colors[grep('pink', all.colors)]) 
+str(all.colors[grep('spring', all.colors)]) 
+
+p1 <- show.colors(color = colors(), shade='pink', n = 20, nx = 5, ny = 4,title = '')
+p2 <- show.colors(color = colors(), shade='spring', n = 12, nx = 6, ny = 2, title =  'Shades of spring')
+grid.arrange(p1,p2, ncol=2)
+```
+
+- 2.3 Translation of other color models to hex  
+
+R can translate from RGB, HSV , and HCL system to their hexadecimal notations. 
+
+rgb(red, green, blue, alpha) 
+
+hcl(hue, chroma, luminescence, alpha)
+hue: 0 - red, 60 - yellow, 120 - green, 180 - cyan, 240 - blue, 300 - magenta
+
+hsv(hue, saturation, value, alpha)
+hue: 0 - red, 1/6 - yellow, 1/3 - green, 1/2 - cyan, 2/3 blue, 5/6 - magenta
+
+The hue of a color refers to which pure color it resembles and the number spcifies the position on the color wheel as the fraction between 0 and 1 for HSV and 0 and 360 for HCL color model. The other two parameters refer to color saturation and brigthness; alpha refers to color transparency  
+
+``` {r fig.width = 5, fig.height = 1}
+RGB <- c ( rgb(0,1,0, max=1, alpha=0.59), rgb(0,255,0, max=255, alpha=150) )
+HSV <- c (hsv(2/3, 0.8, 0.8, alpha = 1), hsv(2/3,0.8,0.7, alpha = 0.5) )
+HCL <- c( hcl(h=300, c=35, l=85), hcl(h=300, c=200, l=85) )
+p1 <- show.hex( RGB, title = 'RGB -> HEX' )
+p2 <- show.hex( HSV, title = 'HSV -> HEX' )
+p3 <- show.hex( HCL, title = 'HCL -> HEX' )
+grid.arrange( p1,p2,p3, ncol=3 )
+```
+
+### 3. Color palettes 
+
+A palette is simply a vector of colors; Named colors can be mixed together with hexadecimal codes.  
+
+- 3.1 Color Palettes in {grDevices} and {colorRamps} 
+``` {r fig.width = 10, fig.height = 5, dpi = 300}
+  
+palette()
+oldPal <- palette()
+oldPal
+palette(c('blue','violet','gold'))
+palette()
+palette(oldPal)
+palette()
+
+p1 <- show.colors(color = palette(), n = 8, nx = 4, ny = 2, labels = '#', title = 'palette() colors')
+
+
+
+
+# contiguous colors: palette.name(number of colors, alpha)
+p2 <- show.colors(color = rainbow(6), n = 6, nx = 3, ny = 2, labels = '#', title = 'rainbow(n) colors')
+p3 <- show.colors(color = heat.colors(10), n = 10, nx = 5, ny = 2, labels = '#', title = 'heat.colors(n)')
+p4 <- show.colors(color = terrain.colors(10), n = 10, nx = 5, ny = 2, labels = '#', title = 'terrain.colors(n)')
+p5 <- show.colors(color = topo.colors(10), n = 10, nx = 5, ny = 2, labels = '#', title = 'topo.colors(n)')
+p6 <- show.colors(color = gray.colors(10), n=10, nx = 5, ny = 2, labels = '#', title = 'gray.colors(n)')
+grid.arrange(p1, p2, p3, p4, p5, p6, ncol = 3)
+```
+
+- 2.3.2 Color Palettes in {RColorBrewer}  
+Provides three types of palettes: sequential, qualitative, diverging
+  
+``` {r fig.width = 8, fig.height = 10}
+# show all palettes
+display.brewer.all()
+# specify number of colors and color palette name
+brewer.pal(5, 'Accent')
+```
+- 2.3.2 Color Palettes in {colorspace}  
+Provides palettes in HSV and HCL system. These are default palettes in \{ggplot2\}.
+  
+``` {r fig.width = 5, fig.height = 3}
+par(mfrow=c(2,3), mar = c(0,0,3,0))
+pie(rep(1,1000), col=rainbow_hcl(1000, c=80, l=50), labels=NA, border=F, main = 'chroma = 80\nluminescence = 50')
+pie(rep(1,1000), col=rainbow_hcl(1000, c=80, l=80), labels=NA, border=F, main = 'chroma = 80\nluminescence = 80')
+pie(rep(1,1000), col=rainbow_hcl(1000, c=300, l=80), labels=NA, border=F, main = 'chroma = 300\nluminescence = 80')
+pie(rep(1,1000), col=diverge_hsv(1000, h=c(0, 240), s=0.5, v=0.5), labels=NA, border=F, main = 'saturation = 0.5\nvalue = 0.5')
+pie(rep(1,1000), col=diverge_hsv(1000, h=c(0, 240), s=0.5, v=1), labels=NA, border=F, main = 'saturation = 0.5\nvalue = 1')
+pie(rep(1,1000), col=diverge_hsv(1000, h=c(0, 240), s=1, v=1), labels=NA, border=F, main = 'saturation = 1\nvalue = 1')
+par(oldPar)
+```
+
+
+### 3. Plotting with color
+
+- 3.1 Set data 
+
+``` {r include = FALSE}
+
+# Load and assign data objects
+
+load('/Users/balaji/Downloads/plots/NeveG200.RData')# 200 rows/50 columns
+load('/Users/balaji/Downloads/plots/Data_Neve.RData')# ~20k rows/50 columns
+
+Data <- NeveG200_data 
+Dx <- dat.Neve 
+Info <- NeveG200_info # columns info
+str(Data)
+str(Dx)
+str(Info)
+```
+
+- 3.2 Discrete variables 
+
+- 3.2.1 Color leaves of dendrogram  
+
+``` {r fig.width = 12, fig.height = 6}
+
+# calculate dendrogram (Euclidean distance)
+Eucdist<- dist(t(Data), method = 'euclidean') # calculates distance between rows
+clust <- hclust(Eucdist)
+dend <- as.dendrogram(clust)
+plot(dend)
+
+#.. cut dendrogram to three clusters and color the leaves
+dend.colo = color_branches( dend, k=3, col = palette()[c(2,3,4)] )
+
+#.. change labels to geneCluster assignement, order by clustering
+labels(dend.colo) = Info$geneCluster[clust$order]
+
+#.. plot dendrogram
+plot(dend.colo, ylab = 'Euclidean distance', main = 'HCL dendrogram')
+
+
+# calculate dendrogram (1 - correlation distance)
+Cordist <- as.dist(1 - cor(t(Data))) # calculates correlation between columns
+clust <- hclust(Cordist, method = 'average')
+dend <- as.dendrogram(clust)
+plot(dend)
+
+#.. cut dendrogram by merge height (correlation coeff. >= 0.2)
+h <- 1 - 0.2
+cut.clust <- cutree(clust, h = h)
+
+#.. calculate number of clusters
+n.clust = length(table(cut.clust))
+
+#.. cut dendrogram to n clusters and color the leaves
+dend.colo = color_branches( dend, k=n.clust, col = brewer.pal(n.clust, 'Dark2') )
+
+#.. set font size labels, NA removes the labels
+labels_cex(dend.colo) = NA
+
+#.. plot dendrogram
+plot(dend.colo, ylab = '1 - correlation distance', main = 'HCL dendrogram')
+abline(h = h)
+```
+
+3.2.2 Map color to factor levels 
+``` {r fig.width = 4, fig.height = 4, dpi = 300}
+
+# set factors
+ER <- factor(Info$ER)
+Color <- factor(Info$ER, labels = topo.colors(2))
+#table(ER, Color)
+
+# set variables
+x <- Data[1,]
+y <- Data[2,]
+
+
+# plot scatter plot
+plot(x, y, pch = 15, col = as.character(Color))
+
+# add legend
+legend('topright', legend = levels(ER), title = 'ER status', pch = 15, col = as.character(Color))
+
+```
+
+
+- 3.3 Continuous variables 
+``` {r}
+# set data
+DF <- data.frame(Dx[,1:2])
+names(DF) <- c('x','y')
+#str(DF)
+```
+
+
+- 3.3.1 Map data density
+
+``` {r fig.width = 6, fig.height = 6, dpi = 300}
+
+# HEXBIN PLOT {ggplot2}
+
+#.. plot scatter - no mapping
+p1 <- ggplot(DF, aes(x=x, y=y)) + geom_point() + theme_bw()+ggtitle('Scatterplot')
+
+#.. plot scatter - no mappimg, smallpoint size + semi-transparent color
+p2 <- ggplot(DF, aes(x=x, y=y)) + geom_point(size = 0.5, col = 'steelblue', alpha = 0.1) + theme_bw()+ggtitle('semi-transparent')
+
+#.. plot scatter; smallpoint size; semi-transparent color; bivariate density contours
+p3 <- p2 + geom_density2d(col = 'black') + ggtitle('density contours')
+
+#.. plot bivariate density bins (hexagonal tiling)
+p4 <- p2 + geom_hex(col='grey80', bins = 30) + ggtitle('Hexbin scatterplot')+ 
+  scale_fill_gradientn(colours=rev(terrain_hcl(6)), name='count')
+
+grid.arrange(arrangeGrob(p1, p2, p3, ncol=3, nrow=1), p4, ncol=1, nrow=2, heights=c(1/4 ,1/2))
+
+```
+
+ 
+``` {r fig.width = 10, fig.height = 6, dpi = 300}
+
+# SMOOTHED SCATTERPLOT {graphics}
+
+#.. set variables
+x = Dx[,1]
+y = Dx[,2]
+n <- nrow(Dx)
+
+par(mfrow = c(2,3))
+
+#.. plot default scatterplot
+smoothScatter(x, y, cex=3, main='smoothed Scatterplot')
+
+#.. use custom palette
+Palette <- colorRampPalette(rev(brewer.pal(8, 'Spectral')))
+smoothScatter(x,y, colramp = Palette, main='smoothed Scatterplot')
+
+
+#.. Map color to data value
+Color <- rev(diverge_hcl(n))[rank(y)]
+
+#..Plot scatterplot
+plot(x,y, pch = '.', col = paste(Color), main = 'Scatterplot')
+
+#..Plot smoothed scatterplot
+Palette <- colorRampPalette(Color)
+smoothScatter(x,y, nrpoints = 0, nbin = 1000, axes =F, xlab='', ylab='', colramp = Palette, main = 'Accidental Agate')
+```
+
+- 3.3.2 Heatmap {gplots}  
+
+``` {r fig.width = 6, fig.height = 5, dpi = 300}
+# plot default heatmap.2(); Euclidean distance, average linkage, no scaling, trace lines
+heatmap.2(Data)
+
+#.. remove trace lines; set z-score by row; set color palette; remove row/col labels
+heatmap.2(Data, trace='none', scale = 'row', col = colorpanel(300, low='green', mid = 'black', high = 'red'), labRow = F, labCol = F )
+
+#.. median center by row
+cData <- t(apply(Data, 1, function(x) x - median(x)))
+
+#.. set color scale: range and breaks
+scale.range <- c(-3,3)
+scale.brakes <- seq(scale.range[1], scale.range[2], by = 0.01)
+n.brakes <- length(scale.brakes) - 1
+Palette <- colorpanel(n.brakes, 'cyan', 'black', 'yellow')
+
+#.. set clustering
+rowDendro <- as.dendrogram(hclust(as.dist(1 - cor(t(cData)))))
+colDendro <- as.dendrogram(hclust(as.dist(1 - cor(cData))))
+
+heatmap.2(cData, trace='none', scale = 'none', labRow = F, labCol = F,
+          col = Palette, breaks = scale.brakes, symkey = T,
+          Rowv = rowDendro, Colv = colDendro)
+
+#.. add column sidebar and color row dendrogram; adjust color key annotation
+bar <- paste(factor(Info$geneCluster, labels = brewer.pal(3, 'Paired')))
+dend.colo = color_branches( rowDendro, k=3, col = rainbow(3, alpha=.5) )
+
+heatmap.2(cData, trace='none', scale = 'none', labRow = F, labCol = F,
+          col = Palette, breaks = scale.brakes, symkey = T,
+          Rowv = dend.colo, Colv = colDendro,
+          ColSideColors = bar,
+          density.info = 'none', key.title = F, key.xlab = 'log base 2')
+```
+
+- 3.4 Exercises: 
+
+- 3.4.1 Correlation heatmaps with gplots (use R data iris):  
+1. Use colorRampPalette to generate color palette (list colors and how many shades of colors): colorRampPalette(collect.colors)(number.shades)
+2. Heatmap 1: map heatmap colors to positive/negative correlation only;
+3. Heatmap 2: map heatmap colors to ranges of correlation coefficient;
+4. Heatmap 3: add cell borders (use: colsep/rowsep argument) and cell text (use cellnote argument)
+5. Heatmap 4: set missing data for diagonal (use: diag(matrix), omit dendrograms and legend key)
+
+```{r fig.width=10, fig.height=10}
+data(iris)
+head(iris)
+cormat <- cor(iris[,1:4], method='spearman', use='pairwise.complete.obs')
+round(cormat,2)
+colo1 = colorRampPalette(rev(brewer.pal(11, 'Spectral')))(2)
+colo2 = colorRampPalette(rev(brewer.pal(11, 'Spectral')))(24)
+colo3 = colorRampPalette(rev(brewer.pal(11, 'Spectral')))(200)
+par(oma=c(6,6,6,6))
+heatmap.2(cormat, scale='none', trace='none', col = colo1, main = 'Heatmap 1')
+heatmap.2(cormat, scale='none', trace='none', col = colo2, main = 'Heatmap 2')
+heatmap.2(cormat, scale='none', trace='none', col = colo3, main = 'Heatmap 3',
+          cellnote=round(cormat,2), notecol = 'black', notecex = 2,  rowsep=0:5, 
+          colsep=0:5, sepcol='black', sepwidth = c(0.01,0.01))
+diag(cormat) <- NA
+heatmap.2(cormat, scale='none', trace='none', col = colo3, main = 'Heatmap 4', 
+          cellnote=round(cormat,2), notecol = 'black', notecex = 2, 
+          dendrogram = 'none', key=FALSE)
+
+```
+
+
+
+``` {r}
+### R Session Info
+  sessionInfo()
