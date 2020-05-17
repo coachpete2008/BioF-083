@@ -1,0 +1,927 @@
+    1  docker --version
+    2  docker ps
+    3  docke pull ubuntu
+    4  docker pull ubuntu
+    5  cat /etc/group
+    6  cat /etc/group | grep 'docker'
+    7  docker ps
+    8  exit
+    9  docker ps
+   10  docker pull ubuntu
+   11  docker ps
+   12  docker images
+   13  docker ps -a
+   14  docker pull ubuntu
+   15  docker images
+   16  docker run -it -d ubuntu
+   17  docker ps -a
+   18  docker run -it -d --name $USER ubuntu
+   19  docker ps -a
+   20  docker exec -it $USER bash
+   21  docker stop $USER
+   22  docker ps -a
+   23  docker run -v ~/Desktop:/testmydata -it $USER
+   24  docker start $USER
+   25  docker run -v ~/Desktop:/testmydata -it $USER
+   26  docker ps -a
+   27  docker run -it $USER
+   28  docker exec -it $USER bash
+   29  docker ps -a
+   30  docker run -it $USER
+   31  docker run -v -it $USER
+   32  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   33  docker stop $USER
+   34  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   35  docker ps -a
+   36  docker rm container $USER
+   37  docker rm $USER
+   38  docker ps -a
+   39  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   40  docker run -d --name $USER -v ~/Desktop:/mnt -t ubuntu
+   41  docker exec -it $USER bash
+   42  ls Desktop/
+   43  docker exec -it $USER bash
+   44  mkdir Desktop/test
+   45  touch Desktop/test/hi.txt
+   46  docker exec -it $USER bash
+   47  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   48  docker ps -a
+   49  docker rm $USER
+   50  docker stop $USER
+   51  docker rm $USER
+   52  docker run -d --name $USER -v ~/Desktop:/mnt -t $USER
+   53  docker run -d --name $USER -v ~/Desktop:/mnt -t ubuntu
+   54  docker exec -it $USER bash
+   55  ls Desktop/test/
+   56  nano Desktop/test/hi.txt 
+   57  rm -rf Desktop/test
+   58  ls -lh Desktop/
+   59  docker exec -it $USER bash
+   60  ls -lh Desktop/
+   61  rm -rf Desktop/test/
+   62  docker exec -it $USER bash
+   63  mkdir Desktop/test
+   64  touch Desktop/test/hi.txt
+   65  nano Desktop/test/hi.txt 
+   66  docker exec -it $USER bash
+   67  ls Desktop/test/
+   68  ls -lh Desktop/test/
+   69  docker pull broadinstitute/gatk:4.1.3.0
+   70  docker ps -a
+   71  docker pull broadinstitute/gatk:4.1.3.0
+   72  docker images
+   73  docker rmi bash
+   74  docker images
+   75  docker run -it broadinstitute/gatk
+   76  docker images
+   77  docker rmi broadinstitute/gatk
+   78  docker images
+   79  docker rmi broadinstitute/gatk
+   80  docker images
+   81  docker rmi broadinstitute/gatk:4.1.3.0 
+   82  docker images
+   83  docker rmi broadinstitute/gatk:4.1.3.0 
+   84  docker pull broadinstitute/gatk:4.1.3.0
+   85  docker run -it broadinstitute/gatk:4.1.3.0
+   86  docker ps -a
+   87  docker stop 5afde4591244
+   88  docker rm 5afde4591244
+   89  docker ps -a
+   90  docker run -it broadinstitute/gatk:4.1.3.0 --name $USER
+   91  docker run --name $USER -it broadinstitute/gatk:4.1.3.0
+   92  docker ps -a
+   93  docker stop 17614c5fbb8e
+   94  docker rm 17614c5fbb8e
+   95  docker run --name $USER.gatk -it broadinstitute/gatk:4.1.3.0
+   96  docker 
+   97  docker run --name $USER.gatk -it broadinstitute/gatk:4.1.3.0
+   98  docker exec -it $USER.gatk
+   99  docker exec -it $USER.gatk bash
+  100  docker ps -a
+  101  docker start $USER.gatk
+  102  docker exec -it $USER.gatk bash
+  103  docker ps -a
+  104  docker stop $USER.gatk
+  105  docker rm container $USER.gatk
+  106  docker stop $USER.gatk
+  107  docker ps -a
+  108  docker run --name $USER.gatk -it broadinstitute/gatk:4.1.3.0
+  109  docker ps -a
+  110  docker stop $USER.gatk
+  111  docker ps -a
+  112  docker stop $USER.gatk
+  113  docker tm $USER.gatk
+  114  docker rm $USER.gatk
+  115  docker ps -a
+  116  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu
+  117  docker stop $USER
+  118  docker rm $USER
+  119  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu
+  120  docker exec -it $USER bash
+  121  docker ps -a
+  122  docker rm 88ad1b810b16
+  123  docker stop 88ad1b810b16
+  124  docker rm 88ad1b810b16
+  125  docker ps -a
+  126  docker stop 91c928875258
+  127  docker rm 91c928875258
+  128  docker ps -a
+  129  docker stop eea154a19fe0
+  130  docker rm eea154a19fe0
+  131  docker ps -a
+  132  docker exec -it $USER bash
+  133  docker ps -a
+  134  ls
+  135  ls Desktop/
+  136  ls Desktop/chipseq
+  137  ls -lh Desktop/chipseq
+  138  ls -lh Desktop/chipseq/
+  139  ls /home/visk/
+  140  ls /home/visk/Desktop/
+  141  ls /home/visk/linux_training/
+  142  ls /home/visk/linux_training/1_basic_linux/
+  143  ls /home/visk/linux_training/2_data_wrangle/
+  144  ls /home/visk/linux_training/3_file_manipulate/
+  145  ls /home/visk/linux_training/3_file_manipulate/files/
+  146  df -sh /home/visk/linux_training/
+  147  du -sh /home/visk/linux_training/
+  148  ln -s /home/manager/linux_training .
+  149  ls
+  150  ls linux_training
+  151  docker ps -a
+  152  docker stop $USER
+  153  docker rm $USER
+  154  docker run -d --name $USER -v ~/:/mnt -it ubuntu
+  155  docker exec -it $USER bash
+  156  docker stop $USER
+  157  docker rm $USER
+  158  docker run -d --name $USER -v /home/manager/linux_training:/mnt -it ubuntu
+  159  docker exec -it $USER bash
+  160  ls
+  161  docker stop $USER
+  162  docker rm $USER
+  163  ls
+  164  cp -R /home/manager/linux_training
+  165  cp -R /home/manager/linux_training .
+  166  ls
+  167  ls linux_training/1_basic_linux/
+  168  ls
+  169  mv linux_training linux
+  170  ls
+  171  rm -rf linux/
+  172  cp -R /home/manager/linux .
+  173  mkdir mydemo
+  174  cp /home/manager/Desktop/unix/human.vcf mydemo
+  175  cp /home/manager/unix/human.vcf mydemo
+  176  cp /home/manager/Desktop/unix/human.vcf mydemo
+  177  cp /home/manager/unix/human.vcf mydemo
+  178  ls mydemo/
+  179  cd mydemo/
+  180  cp /home/manager/unix/FoxA1_peaks.narrowPeak peaks.txt
+  181  cp /home/manager/unix/knownToRefSeq.txt .
+  182  head knownToRefSeq.txt 
+  183  ls
+  184  ls ~
+  185  ls ~/linux/
+  186  ls ~/linux/2_data_wrangle/
+  187  cd ..
+  188  ls
+  189  rm -rf mydemo/
+  190  rm -rf linux
+  191  ls
+  192  mkdir mydemo
+  193  ls
+  194  cp /home/manager/linux/basic/* mydemo
+  195  ls
+  196  ls mydemo/
+  197  cd mydemo/
+  198  ls
+  199  rm ncbiRefSeq.txt 
+  200  head knownToRefSeq.txt 
+  201  cd .
+  202  cd ..
+  203  rm -rf mydemo/
+  204  mkdir mydemo
+  205  cp /home/manager/linux/basic/* mydemo
+  206  cd mydemo/
+  207  ls
+  208  awk '//' transcriptome.gtf
+  209  awk '// {print $2,$3,$4}' transcriptome.gtf
+  210  awk 'NR==1 {print; exit}' ex.txt
+  211  awk '/NOVEL/ {print}' transcriptome.gtf
+  212  awk '$0 !~ /^X/ {print $0 } ' ex.txt
+  213  awk '{if ($4 >= 129299628 && $5 <=143038471) print}' transcriptome.gtf
+  214  awk 'BEGIN { print " File starts here" }  { print } END { print "==ends here==" }' ex.txt  
+  215  awk '{ print "Total Columns:", NF}' transcriptome.gtf
+  216  cd
+  217  ls
+  218  cp -R /home/manager/linux .
+  219  ls
+  220  cp -R /home/manager/linux Desktop/.
+  221  rm -rf linux/
+  222  ls Desktop/
+  223  ls
+  224  docker ps -a
+  225  cp -R /home/manager/linux Desktop/.
+  226  ls
+  227  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu
+  228  ls Desktop/
+  229  docker exec -it $USER bash
+  230  ls Desktop/
+  231  ls Desktop/linux/advanced/
+  232  docker exec -it $USER bash
+  233  ps -aux
+  234  ps -x
+  235  ps -ax
+  236  ps -ux
+  237  ps -raux
+  238  ps -r
+  239  ps -raux
+  240  ps -aux
+  241  ps -C mate
+  242  ps -C ssh
+  243  ps -G root
+  244  ps -G manager
+  245  ps -u manager
+  246  ps -u johnp
+  247  ps -u root
+  248  ps -aux
+  249  ps -au
+  250  manps
+  251  man ps
+  252  ps -au
+  253  ps -aux
+  254  ps -au
+  255  ps ix
+  256  ps ux
+  257  ps 10155
+  258  nice -n 19 wc -l file.txt
+  259  nice -n 19
+  260  nice --help
+  261  man nice
+  262  docker exec -it $USER bash
+  263  ls
+  264  ls mydemo/
+  265  ls
+  266  ls Desktop/
+  267  docker images
+  268  docker ps -a
+  269  docker exec -it $USER bash
+  270  docker start $USER
+  271  docker exec -it $USER bash
+  272  crontab -l
+  273  crontab -e
+  274  crontab -l
+  275  crontab -e
+  276  crontab -l
+  277  ls
+  278  cd Desktop/
+  279  ls
+  280  ls linux/
+  281  ls linux/advanced/
+  282  ls linux/advanced/emboss/
+  283  ls linux/advanced/emboss/sample_sequences
+  284  cd ~/Desktop/linux/advanced/emboss/sample_sequences
+  285  ls
+  286  tar cf archive.tar *fasta
+  287  ls
+  288  tar cf archive2.tar *fasta
+  289  ls
+  290  ls -lh
+  291  tar xf archive2.tar
+  292  ls
+  293  rm bos.archive.tar.gz 
+  294  tar czf bos.archive.tar.gz bos
+  295  ls 
+  296  tar xzvf bos.archive.tar.gz
+  297  ssh host
+  298  ssh localhost
+  299  cd
+  300  cd Desktop/linux/
+  301  ls
+  302  cd advanced/
+  303  ls
+  304  ls my_first_repo/
+  305  cd ~/Desktop/linux/advanced
+  306  ls
+  307  cd
+  308  mkdir my_first_repo
+  309  cd ~/Desktop/linux/advanced/my_first_repo
+  310  ls
+  311  cat README.md 
+  312  echo "# myfirstrepo" >> README.md
+  313  ls
+  314  git version
+  315  git init
+  316  git add README.md 
+  317  git commit -m "first commit"
+  318  git status
+  319  git log --stat
+  320  git log --topo-order --all --graph --date=local --pretty=format:'%C(green)%h%C(reset) %><(55,trunc)%s%C(red)%d%C(reset) %C(blue)[%an]%C(reset) %C(yellow)%ad%C(reset)%n'
+  321  cd
+  322  ls
+  323  rm -rf mydemo/
+  324  ls
+  325  cd Desktop/
+  326  ls
+  327  rm -rf linux/
+  328  ls
+  329  ls -lh
+  330  rm -rf linux/
+  331  lsls
+  332  ls
+  333  rm -rf test/
+  334  ls
+  335  cd
+  336  ls
+  337  exit
+  338  ls -lh
+  339  vwd
+  340  pwd
+  341  history > day1
+  342  history > day1.txt
+  343  pwd
+  344  ls -lh
+  345  cd mydemo
+  346  ls -lh
+  347  cut -f13 ncbiRefSeq.txt | head -n 15 > ncbitop15.txt
+  348  ls -lh
+  349  cat ncbitop15.txt
+  350  head ncbiRefSeq.txt
+  351  cut -f2 ncbiRefSeq.txt | head -n 15 > ncbirefseqids.txt 
+  352  cat ncbireseqids.txt 
+  353  cut -f2 ncbiRefSeq.txt | head -n 15 > ncbitop15refseqids.txt 
+  354  ls -lh
+  355  cat ncbitop15refseqids.txt 
+  356  paste ncbitop15refseqids.txt ncbitop15.txt | head 
+  357  paste ncbitop15refseqids.txt ncbitop15.txt | head > ncbitop15refseqidsnames.txt 
+  358  ls -lh 
+  359  cat ncbitop15refseqidsnames.txt
+  360  head knownToRefSeq.txt 
+  361  sort -k2 knownToRefSeq.txt 
+  362  sort -k2 knownToRefSeq.txt > knownToRefSeqSorted.txt sort on 2nd column 
+  363  sort -k2 knownToRefSeq.txt > knownToRefSeqSorted.txt Sort on 2nd column  
+  364  sort -k2 knownToRefSeq.txt > knownToRefSeqSorted.txt 
+  365  ls lh
+  366  ls - lh
+  367  ls -lh
+  368  cat knownToRefSeqSorted.txt 
+  369  sort -k1 refseqidnames > refseqidnamesSorted.txt 
+  370  ls -lh
+  371  paste refseqids refseqnames > refseqidnames.txt 
+  372  ls -lh
+  373  sort -k1 refseqidnames.txt > refseqidnamesSorted.txt 
+  374  cat refseqidnamesSorted.txt
+  375  join -1 2 -2 1 knownToRefSeqSorted.txt refseqidnamesSorted.txt | head 
+  376  ls -lh
+  377  head peaks.txt 
+  378  sort -k5 peaks.txt | head
+  379  sort -k5n peaks.txt | head 
+  380  sort -k5nr peaks.txt | head
+  381  uniq 
+  382  cut -f13 ncbiRefSeq.txt | sort | head 
+  383  cut -f13 ncbiRefSeq.txt | sort |uniq | head  
+  384  cut -f13 ncbiRefSeq.txt | sort |uniq -c | head  
+  385  cut -f13 ncbiRefSeq.txt | sort |uniq -cu | head  
+  386  cut -f13 ncbiRefSeq.txt | sort |uniq -cd | head  
+  387  cut -f13 ncbiRefSeq.txt | sort |uniq | head -n 200 | tail -n 100 > glist2.txt   
+  388  cut -f13 ncbiRefSeq.txt | sort |uniq | head -n 150 > glist1.txt    
+  389  comm glist1.txt glist2.txt 
+  390  comm -12 glist1.txt glist2.txt 
+  391  comm -23 glist1.txt glist2.txt 
+  392  comm -13 glist1.txt glist2.txt 
+  393  diff glist1.txt glist2.txt 
+  394  diff -y glist1.txt glist2.txt 
+  395  history > day1.txt
+  396  ls -lh
+  397  history > day1HW.txt
+  398  ls -lh 
+  399  cd ~
+  400  Is -a
+  401  ls -a
+  402  ls
+  403  cp .bashrc bashrc_backup
+  404  ls
+  405  alias map="clear"
+  406  alias
+  407  vi
+  408  vi .bashrc
+  409  alias mop="clear"
+  410  ls -lhra
+  411  vi bashrc
+  412  clear
+  413  docker ps
+  414  docker ps -a
+  415  docker ps -l
+  416  docker --version
+  417  docker pull ubuntu 
+  418  docker images
+  419  docker run -it -d --name $johnp ubuntu
+  420  docker ps
+  421  docker run -it -d --name $johnp ubuntu 
+  422  docker run -it -d --johnp $USER ubuntu
+  423  docker run -it -d --name $USER ubuntu
+  424  docker run --help
+  425  docker stop $USER
+  426  docker run -it -d --name $USER ubuntu
+  427  docker rm container $USER
+  428  docker stop $USER
+  429  docker rm container $USER
+  430  cd~
+  431  ls -a
+  432  vi bashrc
+  433  docker pull ubuntu
+  434  docker images
+  435  docker run -it -d --name $USER ubuntu
+  436  docker ps -a# see all containers
+  437  docker -a
+  438  clear
+  439  docker ps -a
+  440  docker stop container
+  441  docker stop container $USER
+  442  docker ps -a
+  443  clear
+  444  docker run -d --name $USER -v~/Desktop:/mnt -it ubuntu
+  445  docker stop container $USER
+  446  docker run -d --name $USER -v~/Desktop:/mnt -it ubuntu
+  447  clear
+  448  docker run -d --name $USER -v~/Desktop:/mnt -it ubuntu 
+  449  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu 
+  450  docker rm container $USER
+  451  clear
+  452  docker run -d --name $USER -v ~/Desktop:/mnt -it ubuntu
+  453  cp -R /home/manager/linux Desktop/.
+  454  mkdir ~/Desktop/test
+  455  nano ~/Desktop/test/hi.txt
+  456  docker exec -it $USER bash
+  457  check out ~/Desktop/test/hi.txt file
+  458  docker stop
+  459  docker pull broadinstitute/gatk:4.1.3.0
+  460  docker run --name $USER.gatk -it broadinstitute/gatk:4.1.3.0
+  461  docker stop $USER.gatk
+  462  docker rm $USER.gatk
+  463  docker exec -it $
+  464  docker exec -it $USER bash
+  465  clear
+  466  git clone https://github.com/taoliu/MACS.git
+  467  ls
+  468  cd MACS
+  469  ls
+  470  python3 setup.py install
+  471  python3 setup.py install --prefix /home/johnphome/
+  472  python3 setup.py install --prefix /home/johnp/
+  473  echo $USER
+  474  export PYTHONPATH=/home/johnp/lib/python3.6/site-packages:$PYTHONPATH
+  475  echo $PYTHONPATH
+  476  export PYTHONPATH=/home/johnp/lib/python3.6/site-packages
+  477  echo $PATH
+  478  export PATH=/home/johnp/bin:$PATH
+  479  alias python="python3"
+  480  python3 setup.py install --prefix /home/johnp/
+  481  macs2 -h
+  482  clear
+  483  docker exec -it $USER bash
+  484  hostname -i
+  485  last reboot
+  486  date
+  487  history
+  488  cal
+  489  lsof
+  490  agt install tree
+  491  apt install lsof
+  492  apt install tree
+  493  who
+  494  w
+  495  free -h
+  496  watch df -h
+  497  docker exec -it $USER bash
+  498  cd ~/Desktop/linux/advanced emboss/sample_sequences$ 
+  499  cd
+  500  ~/Desktop/linux/advanced emboss/sample_sequences$ 
+  501  ls -lh
+  502  ~/Desktop/linux/advanced emboss/sample_sequences$ tar cf archive2.tar *.fasta
+  503  ls -l
+  504  ~/Desktop/linux/advanced emboss/sample_sequences$ 
+  505  cd ~/Desktop/linux/advanced/emboss/sample_sequences
+  506  tar cf archive2.tar *fasta
+  507  ls -l
+  508  tar xf archive2.tar
+  509  ls -l
+  510  rm bos.archive.tar.gz
+  511  ls -l
+  512  tar czf bos.archive.tar.gz bos
+  513  ls -l
+  514  tar xzvf bos.archive.tar.gz 
+  515  pwd
+  516  ls
+  517  mkdir mydemo
+  518  ls
+  519  cp /home/johnp/linux/basic/* mydemo
+  520  cp /home/manager/linux/basic/* mydemo
+  521  ls
+  522  cd mydemo
+  523  pwd
+  524  ls
+  525  ls -l 
+  526  ls -lh
+  527  man ls
+  528  ls
+  529  cp human.vcf towork.txt
+  530  ls
+  531  mv towork.txt variants.txt
+  532  ls
+  533  head variants.txt
+  534  head -n 2 variants,txt
+  535  head -n 2 variants.txt
+  536  head -n 10 variants.txt > variant10.txt 
+  537  ls
+  538  cat variant10.txt
+  539  tail variants.txt
+  540  ls -l
+  541  rm variant10.txt
+  542  ls -l
+  543  more variants.txt 
+  544  less variants.txt
+  545  grep A variants.txt
+  546  grep -w A variants.txt
+  547  grep '\sA\s' variants.txt
+  548  grep '\sAT\s' variants.txt
+  549  grep '\sAT\s' variants.txt > at.txt
+  550  ls
+  551  wc variants.txt
+  552  wc -l variants.txt
+  553  wc -l at.txt
+  554  head -n 20variants.txt
+  555  head -n 20 variants.txt
+  556  head -n 20 variants.txt > variants20.txt
+  557  ls
+  558  cat variants20.txt
+  559  rm variants20.txt
+  560  ls
+  561  grep '\sGATC\'s > varaiantGATC.txt
+  562  grep GATC variants.txt
+  563  -w grep GATC variants.txt
+  564  grep -w GATC variants.txt
+  565  grep -w GATC variants.txt > variantsGATC.txt
+  566  cat variantsGATC.txt
+  567  grep -w '\sGATC\s' variants.txt > variantsGATC.txt
+  568  ls
+  569  cat variantsGATC.txt
+  570  cat variantGATC.txt
+  571  rm variantsGATC,txt
+  572  rm variantsGATC.txt
+  573  ls
+  574  rm variantGATC.txt
+  575  grep -w '\sGATC\s' variants.txt > variantsGATC.txt
+  576  ls
+  577  rm varaiantGATC.txt
+  578  ls
+  579  cat variantsGATC.txt
+  580  head variantsGATC.txt
+  581  rm variantsGATC.txt
+  582  ls
+  583  grep -w GATC variants.txt
+  584  grep '\sGATC\s' variants.txt
+  585  grep '\sGATC\s' variants.txt > variantsGATC.txt
+  586  cat variantsGATC.txt
+  587  wc -1 variantsGATC.txt
+  588  wc -l variantsGATC.txt
+  589  grep '\sTA\s' variants.text > ta.txt
+  590  grep '\sAT\s' variants.text > at.txt
+  591  ls
+  592  cat ta.txt
+  593  head ta.txt
+  594  grep '\sAT\s' variants.txt > AT.txt
+  595  cat AT.txt
+  596  grep '\sTA\s' variants.txt > TA.txt
+  597  cat TA.txt
+  598  cat AT.txt TA.txt > taat.txt
+  599  ls
+  600  tail taat.txt
+  601  rm at.txt
+  602  rm ta.txt
+  603  ls
+  604  wc -l taat.txt
+  605  nano file1.johnp
+  606  ls
+  607  nano file1.test
+  608  ls
+  609  head file1.txt
+  610  head file1.test
+  611  head -n 2 variants.txt > twolines
+  612  ls
+  613  cat twolines
+  614  wc -l < variants.txt
+  615  tail -n 2 variants.txt >> tw0lines
+  616  cat twolines
+  617  ls
+  618  rm tw0lines
+  619  ls
+  620  tail -n 2 variants.txt >> twolines
+  621  cat twolines
+  622  grep '\sAC\s' variants.txt
+  623  grep '\sAC\s' variants.txt | wc -l
+  624  grep '\sAC\s' variants.txt | grep Minus
+  625  grep '\sAC\s' variants.txt | grep Minus | wc -l
+  626  man wget
+  627  wget hgdownload.cse.ucsc.edu/goldenPath/hg38/database/ncbiRefseq.txt.gz
+  628  wget hgdownload.cse.ucsc.edu/goldenPath/hg38/database/ncbiRefSeq.txt.gz
+  629  ls
+  630  ls -lh ncbiRefSeq.txt.gz
+  631  ls -l
+  632  ls -lh ncbiRefSeq.txt.gz
+  633  gunzip ncbiRefSeq.txt.gz
+  634  ls
+  635  wget hgdownload.cse.ucsc.edu/goldenPath/hg38/database/ncbiRefSeq.txt.gz
+  636  ls -lh
+  637  nano ncbiRefSeq.txt
+  638  ls -l ncbiRefSeq.txt
+  639  ls -lh ncbiRefSeq.txt
+  640  head ncbiRefSeq.txt
+  641  tail ncbiRefSeq.txt
+  642  ls
+  643  grep -ivw chr1 ncbiRefSeq.txt 
+  644  grep -ivw Chr1 ncbiRefSeq.txt | grep -i chr10 | head 
+  645  grep chr10 -iw ncbiRefSeq.txt
+  646  grep -P 'chr10\s\+' ncbiRefSeq.txt
+  647  head ncbiRefSeq.txt
+  648  cut -f13 ncbiRefSeq.txt | head
+  649  cut -f2,13 ncbiRefSeq.txt | head 
+  650  cut --d$'\t' f2,13 ncbiRefSeq.txt | head 
+  651  cut -d$'\t' -f2,13 ncbiRefSeq.txt | head 
+  652  cut -f2 ncbiRefSeq.txt | cut -d'.' -f1 
+  653  cut -f2 ncbiRefSeq.txt | cut -d'.' -f2 
+  654  cut -f2 ncbiRefSeq.txt | cut -d'.' -f1 
+  655  cut -f2 ncbiRefSeq.txt | cut -d'.' -f1 > refseqids 
+  656  cut -f2,13 ncbiRefSeq.txt > refseqnames 
+  657  ls
+  658  ls -lh
+  659  wka '//' transcriptome.gtf
+  660  awk '// {print $2,$3,$4}' transcriptome.gtf 
+  661  awk '/TTY17B/ {print}' transcriptome.gtf 
+  662  awk 'NR==1 {print; exit}' ex.txt 
+  663  head ext.txt
+  664  head ex.txt
+  665  awk 'NR==2 {print; exit}' ex.txt 
+  666  awk '/NOVEL/{print;exit}' ex.txt
+  667  awk '/NOVEL/ {print;exit}' ex.txt 
+  668  awk '/^[0-9]/ {print}' ex.txt 
+  669  awk '{if ($4 >= 129299628 && $5 <=143038471) print}' transcriptome.gtf 
+  670  awk '$0 !~/^X/ {print $0 }' ex.txt 
+  671  awk '$0 !~/^X/ {print "Virus: "$1,"Strain: "$2}' ex.txt 
+  672  nano hello.bash
+  673  ls
+  674  ls -l
+  675  cat hello.bash
+  676  ./hello.bash 
+  677  chmod 755 hello.bash
+  678  ./hello.bash 
+  679  ls
+  680  banana=cherry
+  681  echo banana 
+  682  echo $banana
+  683  banana=apple
+  684  echo $banana
+  685  nano hello.bash
+  686  ./hello.bash 
+  687  nano hello.bash
+  688  ./hello.bash 
+  689  nano hello.bash
+  690  ./hello.bash 
+  691  echo $SHELL 
+  692  history > day1.txt
+  693  ls
+  694  cd ~/Desktop/linux/advanced/my_first_repo
+  695  rm README.md
+  696  echo "# myfirstrepo" >> README.md
+  697  git version
+  698  git init
+  699  git add README.md
+  700  git commit -m "first commit"
+  701  git remote add origin https://github.com/coachpete2008/myfirstrepo.git
+  702  cd ..
+  703  git clone  https://github.com/coachpete2008/myfirstrepo.git
+  704  cd ..
+  705  https://github.com/coachpete2008/BioF-083
+  706  git clone https://github.com/coachpete2008/BioF-083
+  707  ls -lh
+  708  cd BioF-083
+  709  git status
+  710  nano README.md
+  711  git push
+  712  cd ..
+  713  git init
+  714  git clone https://github.com/coachpete2008/BioF-083
+  715  exec ~/Desktop/advanced/Biof-083
+  716  johnp@3.228.90.195 'ls -lh
+  717  johnp@3.228.90.195 ls =lh
+  718  johnp@3.228.90.195 ls -lh
+  719  johnp@3.228.90.195 'ls -lh'
+  720  johnp@3.228.90.195 'ls -lh' ~/Desktop'
+  721  ls [l
+  722  johnp@3.228.90.195 ls -l
+  723  johnp@3.228.90.195 'cd ~/Desktop; ls -lh'
+  724  ssh -Y johnp@3.228.90.195 pluma
+  725  'cd ~/Desktop; ls -lh'
+  726  johnp@3.228.90.195 'cd ~/Desktop; ls -lh'
+  727  ssh -Y johnp@3.228.90.195 pluma
+  728  exit
+  729  ssh johnp@3.228.90.195
+  730  exit
+  731  ssh jonhp@3.228.90.195 'cd ~/Desktop; ls -lh'
+  732  ls -l
+  733  cd BioF-083
+  734  git config --global use.email"coachpete2008@gmail.com"
+  735  git add README.md
+  736  git commit -am"first commit"
+  737  git add file2.txt
+  738  cp ../my_first_repo/file2.txt .
+  739  ls -l
+  740  git add file2.txt
+  741  git status
+  742  git push
+  743  "git push"
+  744  git push
+  745  git push -u origin master
+  746  git clone  https://github.com/your_user/example-repo.git   example_repo
+  747  cd example_repo
+  748  git config --global user.email "coachpete2008@gmail.com"
+  749  git config --global user.name "coachpete2008"
+  750  git remote add origin https://github.com/kasthuribai/example-repo.git
+  751  git remote -v
+  752  git checkout -b develop
+  753  git status
+  754  git push origin develop
+  755  git checkout master
+  756  git checkout develop
+  757  >develoment.txt
+  758  rm develoment.txt
+  759  >development.txt
+  760  ls
+  761  git status
+  762  git add development.txt
+  763  git commit -m "added development.txt"
+  764  git push u origin master
+  765  git status
+  766  git checkout develop
+  767  git status
+  768  ls
+  769  cd ..
+  770  cd ~/Desktop/linux/advanced
+  771  crontab - l
+  772  crontab - | 
+  773  crontab -l
+  774  crontab  -e
+  775  R
+  776  python3
+  777  python3 -V
+  778  nano
+  779  'nano hello.py',
+  780  nano
+  781  ls
+  782  nano hello.py
+  783  python3 hello.py
+  784  nano hello.py
+  785  nano
+  786  ls
+  787  nano conditions.py
+  788  nano conditons.py
+  789  ls
+  790  rm conditons.py
+  791  ls
+  792  cd linux-beginner/
+  793  cd my_first_repo/
+  794  ls
+  795  git checkout master
+  796  cp ~/condiotns.py
+  797  cp ~/conditions.py
+  798  ls -a
+  799  cd ..
+  800  git clonehttps://github.com/coachpete2008/BioF-083.git
+  801  git clone https://github.com/coachpete2008/BioF-083.git
+  802  ls
+  803  cd BioF-083
+  804  cp ~/hello.py .
+  805  cp ../hello.py .
+  806  git add .
+  807  git commit -m "adding hello.py"
+  808  git push
+  809  pwd
+  810  samtools19 index tophat_wt/accepted_hits.bam
+  811  source /etc/profile.d/markcbm.sh
+  812  samtools19 index tophat_wt/accepted_hits.bam
+  813  ls -l
+  814  cd ~/Desktop/linux/advanced/rnaseq/
+  815  source /etc/profile.d/markcbm.sh
+  816  samtools19 index tophat_wt/accepted_hits.bam
+  817  samtools19 index tophat_del/accepted_hits.bam
+  818  ls -lh
+  819  cuffdiff --no-update-check -o cuffdiff_out -L wt,del mm9_chr1.gtf tophat_wt/accepted_hits.bam tophat_del/accepted_hits.bam
+  820  ls -lh cuffdiff_out
+  821  pwd
+  822  ls
+  823  bash RNAseqpipe.sh 
+  824  ls -lh
+  825  bash RNAseqpipe.sh 
+  826  ls -l
+  827  bash RNAseqpipe.sh 
+  828  ls
+  829  ls -lh
+  830  cd ~/Desktop/linux1/advnced/my_first_repo/
+  831  cd ~/Desktop/linux1/advanced/my_first_repo/
+  832  ls
+  833  git add .
+  834  git status
+  835  git add .
+  836  git commit -m "my RNaseq"
+  837  git push
+  838  cd ..
+  839  cd ls
+  840  ls
+  841  cd BioF-083/
+  842  ls
+  843  git add .
+  844  git commit -m "Rnaseq"
+  845  git push
+  846  git add .
+  847  git commit -m "training files"
+  848  git push
+  849  history > mycommands.ext
+  850  ls
+  851  git add .
+  852  git commit -m "training commands"
+  853  git push
+  854  ls
+  855  git add mycommands.ext
+  856  git commit -m "training commands"
+  857  git push
+  858  git reset --hard HEAD^
+  859  git add mycommands.ext
+  860  ls
+  861  history > mycommands.txt
+  862  git add .
+  863  git reset --hard HEAD^
+  864  ls
+  865  history > mycommands.txt
+  866  git add mycommands.txt 
+  867  git commit -m "training commands"
+  868  git push
+  869  git add .
+  870  git commit -m "more files"
+  871  git push
+  872  git add .
+  873  git commit -m "git tutorial"
+  874  git push
+  875  git status
+  876  git add .
+  877  cd ~/Desktop/linux/advanced/Biof-083
+  878  cd ~/Desktop/linux1/advanced/BioF-083
+  879  git add .
+  880  git commit -m "R cheat sheet"
+  881  git push
+  882  git add .
+  883  git status
+  884  git commit -m "more examples"
+  885  git push
+  886  git add .
+  887  git commit -m "more files'
+  888  git commit -m "more files"
+  889  git status
+  890  git push
+  891  git add .
+  892  git commit -m "more"
+  893  git push
+  894  pwd
+  895  ls -lh
+  896  mkdir JWP-HW
+  897  ls
+  898  cp /home/manager/linux/basic/* JWP-HW
+  899  cd JWP-HW
+  900  ls -l
+  901  cp human.vcf mywork.txt
+  902  ls l
+  903  ls -l
+  904  mv mywork.txt variants.txt
+  905  ls -l
+  906  grep '\GATCs\' variants.txt > myGATC.txt | grep '\AAUAAAs\' variants.txt > mypolyA.txt  | catmyGATC.txt mypolyA.txt > myGATCpolyA.txt
+  907  grep '\GATCs\' variants.txt > myGATC.txt | grep '\AAUAAAs\' variants.txt > mypolyA.txt  | cat myGATC.txt mypolyA.txt > myGATCpolyA.txt 
+  908  ls -l
+  909  head n -20 myGATC.txt
+  910  rm myGATC.txt
+  911  rm mypolyA.txt
+  912  ls -l
+  913  rm myGATCpolyA.txt
+  914  grep '\sGATC\s' variants.txt > myGATC.txt | grep '\sAAUAAA\s' variants.txt > mypolyA.txt  | cat myGATC.txt mypolyA.txt > myGATCpolyA.txt 
+  915  ls -l
+  916  head n -30 myGATCmypolyA.txt > hdmyGATCmypolyA.txt | tail n -30 myGATCmypolyA.txt > tlmyGATCmypolyA.txt | cat hdmyGATC.txt tlmyGATCmypolyA.txt >htmyGATCmypolyA.txt 
+  917  ts -t
+  918  ls -l
+  919  head htmyGATCmypolyA.txt
+  920  rm myGATCpolyA.txt
+  921  rm hdmyGATCmypolyA.txt
+  922  rm htmyGATCmypolyA.txt
+  923  rm tlmyGATCmypolyA.txt
+  924  ls -l
+  925  head n -30 myGATCmypolyA.txt > hdmyGATCmypolyA.txt | tail n -30 myGATCmypolyA.txt > tlmyGATCmypolyA.txt | cat hdmyGATCmypolyA.txt tlmyGATCmypolyA.txt >htmyGATCmypolyA.txt 
+  926  ls -l
+  927  history > 5-16-20.txt
